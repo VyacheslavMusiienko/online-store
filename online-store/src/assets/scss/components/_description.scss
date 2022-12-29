@@ -1,12 +1,18 @@
+.details-section{
+  margin: 0 auto;
+  min-height: 75vh;
+}
+
 .description-container {
   position: relative;
   display: flex;
+  // flex-direction: row;
   justify-content: center;
   align-items: center;
   text-align: center;
   margin: 4% auto;
   background-color: $color_deep-water;
-  width: 50%;
+  width: 100%;
   height: fit-content;
   padding: 20px;
   border-radius: 30px;
