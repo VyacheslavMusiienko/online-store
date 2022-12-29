@@ -14,8 +14,27 @@ let getProductList = async () => {
     console.log('Error getting documents', err);
   }
 };
+let getAllProductsCategories = async () => {
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    const response = await fetch(`https://dummyjson.com/products/categories`, options);
+    const json = await response.json();
+    // console.log(json)
+    return json;
+  } catch (err) {
+    console.log('Error getting documents', err);
+  }
+};
 
 let Home = {
+  // cards wrapper
+
+  // cards menu
   renderCardsSort: async () => {
     let view = `
     <div class="cards-sort">
@@ -64,6 +83,8 @@ let Home = {
     `;
     return view;
   },
+
+  // render Cards
   renderCard: async () => {
     let product = await getProductList();
     return product.products
@@ -104,6 +125,9 @@ let Home = {
     `;
     return view;
   },
+  // filter wrapper
+
+  // button filter
   renderFilterButton: async (param, input) => {
     let view = `
       <button class="btn ${param}">${input}</button>
@@ -118,10 +142,35 @@ let Home = {
       </div>`;
     return view;
   },
+  // filter cards
+
+  renderedFilterItemBody: async (arg, name) => {
+    return arg
+      .map((products) => {
+        return `<div class = "filter-item">
+                    <input type="checkbox" id="${products}" name="${name}">
+                    <label for="${products}">${products}</label>
+                </div>`;
+      })
+      .join('');
+  },
+  // filter category
+  renderFilterCategory: async () => {
+    let categories = await getAllProductsCategories();
+    let view = `
+    <div class="filter-block category-block">
+      <div class="filter-title category-title">Category</div>
+        <div class="filter-body category-body">
+          ${await Home.renderedFilterItemBody(categories, 'category')}
+        </div>
+    </div>`;
+    return view;
+  },
   renderWrapperFilter: async () => {
     let view = `
     <div class="wrapper filter">
       ${await Home.renderFilterButtons()}
+      ${await Home.renderFilterCategory()}
     </div>
     `;
     return view;
