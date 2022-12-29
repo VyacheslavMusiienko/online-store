@@ -1,0 +1,111 @@
+.modal {
+    color:aliceblue;
+    position: fixed;
+    z-index: 1;
+    margin: 10px auto;
+    left:0;
+    top: 0;
+    right: 0;
+    bottom:0;
+    text-align: center;
+}
+.modal-content {
+    color: $color_text-main;
+    margin: 2px auto; 
+    padding: 20px;
+    background-color: $color_deep-water;
+    width: 50%;
+
+    border-radius: 10px;
+}
+
+h2 {
+    color: $color_wave;
+    margin-bottom: 5px;
+}
+
+.personal_details {
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.personal_details h2,
+.credit_card_details h2 {
+    font-size: 25px;
+}
+
+.credit_card_details {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    font-size: 20px;
+}
+
+.input {
+    width: 60%;
+    padding: 5px 10px;
+    margin: 0 auto;
+    text-align: center;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    background-color: $color_ocean;
+    color: $color_text-main;
+    outline: none;
+    border: none;
+    cursor:auto;
+}
+
+.input_card {
+width: 50%;
+}
+
+.card-logo{
+    background-color: aliceblue;
+    vertical-align:middle;
+    border-radius: 10px;
+}
+
+.label {
+    color: $color_wave;
+    cursor: pointer;
+}
+
+.btn_confirm {
+    width: 30%;
+    padding: 5px 15px;
+    margin: 0 auto;
+    background-color: $color_wave;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn_order{
+    width: 30%;
+    padding: 5px 15px;
+    margin: 0 auto;
+    background-color: $color_wave;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+:disabled,
+.btn_order:disabled:hover{
+    background-color: grey
+}
+
+.btn_confirm:hover,
+.btn_order:hover {
+    background-color: #4f7f86;
+}
+
+.error {
+    color: salmon;
+    display: none;
+    margin-bottom: 10px;
+}

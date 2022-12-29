@@ -1,0 +1,168 @@
+main {
+  min-height: 100vh;
+}
+
+.second-container {
+  width: 30%;
+  height: auto;
+  margin: 10px;
+}
+
+.card-container {
+  text-align: center;
+  width: 30%;
+  height: 350px;
+  background-color: $color_wave;
+  border: 1px solid $color_deep-water;
+  margin: 10px;
+  border-radius: 6px;
+}
+
+.img-container {
+  width: 100%;
+  height: 200px;
+}
+
+.card-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.card-price {
+  position: relative;
+  background-color: $color_sea-foam;
+  border-radius: 4px;
+  width: 120px;
+  margin: 6px;
+  bottom: 0px;
+  left: 5px;
+  top: -48px;
+  padding: 5px;
+}
+
+.card-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 95%;
+  background-color: $color_sea-foam;
+  margin: -30px auto;
+  margin-bottom: 2px;
+  border-radius: 5px;
+  height: 40px;
+  padding: 5px;
+}
+
+.card-description {
+  text-align: center;
+  width: 95%;
+  height: 50px;
+  background-color: $color_sea-foam;
+  margin: 0 auto;
+  margin-bottom: 4px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.card-disc-percentage {
+  position: relative;
+  background-color: $color_sea-foam;
+  border-radius: 4px;
+  width: 120px;
+  margin: 6px;
+  bottom: 0px;
+  left: 5px;
+  top: -180px;
+  padding: 5px;
+}
+
+.card-brand {
+  position: relative;
+  background-color: $color_sea-foam;
+  border-radius: 4px;
+  width: 120px;
+  height: 24px;
+  margin: 6px;
+  bottom: 0px;
+  left: 5px;
+  top: -245px;
+  padding: 5px;
+  overflow: hidden;
+}
+
+.card-rating {
+  position: relative;
+  background-color: $color_sea-foam;
+  border-radius: 4px;
+  width: 120px;
+  margin: 6px;
+  bottom: 0px;
+  left: 5px;
+  top: -310px;
+  padding: 5px;
+}
+
+.card-stock {
+  position: relative;
+  background-color: $color_sea-foam;
+  border-radius: 4px;
+  width: 120px;
+  margin: 6px;
+  bottom: 0px;
+  left: 5px;
+  top: -374px;
+  padding: 5px;
+}
+
+.btn-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  border-radius: 4px;
+  width: 100%;
+  bottom: 0px;
+  left: 5px;
+  top: -144px;
+  padding: 5px;
+}
+
+.btn-container-second {
+  position: relative;
+  display: flex;
+  justify-content: end;
+  border-radius: 4px;
+  width: 100%;
+  bottom: 0px;
+  left: -15px;
+  top: -80px;
+  padding: 5px;
+}
+
+.btn {
+  margin: 2.5%;
+  width: 45%;
+}
+
+.filter {
+  height: fit-content;
+}
+
+.btn-pad {
+  width: 25%;
+  border: none;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 2px;
+  background-color: $color_ocean;
+  color: $color_sea-foam;
+}
+
+.btn-pad:hover {
+  background-color: $color_deep-water;
+}

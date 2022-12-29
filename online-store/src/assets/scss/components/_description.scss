@@ -1,0 +1,105 @@
+.description-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 4% auto;
+  background-color: $color_deep-water;
+  width: 50%;
+  height: fit-content;
+  padding: 20px;
+  border-radius: 30px;
+}
+
+.description-title {
+  min-width: 30%;
+  position: absolute;
+  top: -48px;
+  left: 40px;
+  font-size: 25px;
+  color: $color_wave;
+  padding: 10px;
+  background-color: $color_ocean;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.description-item {
+  font-size: 20px;
+  color: $color_deep-water;
+  background-color: $color_wave;
+}
+
+.container-image-descr {
+  background-color: aliceblue;
+  width: 300px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.main-image-description {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.block-summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.descr-btn {
+  margin-top: 20px;
+}
+
+.block-container {
+  border-radius: 10px;
+}
+
+.block-description {
+  width: 50%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 70%;
+  padding: 10px;
+  margin: 20px;
+  background-color: $color_wave;
+  border-radius: 10px;
+}
+
+.info {
+  padding: 10px;
+  color: $color_sea-foam;
+  background-color: $color_ocean;
+  margin-bottom: 5px;
+  border-radius: 8px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.descr-btn {
+  width: 50%;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  background-color: $color_deep-water;
+  padding: 5px 5px;
+  color: $color_wave;
+  text-decoration: none;
+}
+
+.descr-btn:hover {
+  background-color: $color_ocean;
+}

@@ -1,0 +1,11 @@
+.footer{
+  background-color: $color_ocean;
+  height: 100px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  &__img{
+    width: 100px;
+  }
+}
