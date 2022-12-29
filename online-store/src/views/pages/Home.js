@@ -104,10 +104,24 @@ let Home = {
     `;
     return view;
   },
+  renderFilterButton: async (param, input) => {
+    let view = `
+      <button class="btn ${param}">${input}</button>
+    `;
+    return view;
+  },
+  renderFilterButtons: async () => {
+    let view = `
+      <div class="button-filter">
+        ${await Home.renderFilterButton('reset', 'Reset')}
+        ${await Home.renderFilterButton('copy', 'Copy')}
+      </div>`;
+    return view;
+  },
   renderWrapperFilter: async () => {
     let view = `
     <div class="wrapper filter">
-      
+      ${await Home.renderFilterButtons()}
     </div>
     `;
     return view;
