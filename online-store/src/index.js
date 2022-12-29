@@ -1,5 +1,6 @@
 'use strict';
 import './assets/scss/index.scss';
+import './assets/scss/description.scss';
 
 import Home from './views/pages/Home.js';
 import Basket from './views/pages/Basket.js';
