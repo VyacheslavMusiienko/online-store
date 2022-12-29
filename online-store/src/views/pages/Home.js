@@ -9,28 +9,12 @@ let getProductList = async () => {
     const response = await fetch(`https://dummyjson.com/products?limit=100`, options);
     const json = await response.json();
     // console.log(json)
-    return json;
+    return json.products;
   } catch (err) {
     console.log('Error getting documents', err);
   }
 };
-let getAllProductsCategories = async () => {
-  const options = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-  try {
-    const response = await fetch(`https://dummyjson.com/products/categories`, options);
-    const json = await response.json();
-    // console.log(json)
-    return json;
-  } catch (err) {
-    console.log('Error getting documents', err);
-  }
-};
-
+let getProduct = getProductList();
 let Home = {
   // cards wrapper
 
@@ -85,9 +69,9 @@ let Home = {
   },
 
   // render Cards
-  renderCard: async () => {
-    let product = await getProductList();
-    return product.products
+  renderCard: async (getProduct) => {
+    let product = await getProduct;
+    return product
       .map(
         (product) => /*html*/ `<div class="card-container">
                                     <div class="img-container">
@@ -111,7 +95,7 @@ let Home = {
   renderCards: async () => {
     let view = /*html*/ `
                 <div class="cards-table">
-                    ${await Home.renderCard()}
+                    ${await Home.renderCard(getProduct)}
                 </div>
         `;
     return view;
@@ -143,9 +127,11 @@ let Home = {
     return view;
   },
   // filter cards
-
+  renderUnique: async (arr, property) => {
+    return Array.from(new Set(await arr.map((item) => item[property])));
+  },
   renderedFilterItemBody: async (arg, name) => {
-    return arg
+    return await arg
       .map((products) => {
         return `<div class = "filter-item">
                     <input type="checkbox" id="${products}" name="${name}">
@@ -154,14 +140,35 @@ let Home = {
       })
       .join('');
   },
+  getRenderedFilterCategoryBody: async (products) => {
+    const filterUnique = await Home.renderUnique(products, 'category');
+    return await Home.renderedFilterItemBody(filterUnique, 'category');
+  },
+  getRenderedFilterBrandBody: async (products) => {
+    const filterUnique = await Home.renderUnique(products, 'brand');
+    return await Home.renderedFilterItemBody(filterUnique, 'brand');
+  },
   // filter category
   renderFilterCategory: async () => {
-    let categories = await getAllProductsCategories();
+    let categories = await getProductList();
     let view = `
     <div class="filter-block category-block">
       <div class="filter-title category-title">Category</div>
         <div class="filter-body category-body">
-          ${await Home.renderedFilterItemBody(categories, 'category')}
+          ${await Home.getRenderedFilterCategoryBody(categories)}
+        </div>
+    </div>`;
+    return view;
+  },
+
+  // filter brand
+  renderFilterBrand: async () => {
+    let brands = await getProductList();
+    let view = `
+    <div class="filter-block brand-block">
+      <div class="filter-title brand-title">Brand</div>
+        <div class="filter-body brand-body">
+          ${await Home.getRenderedFilterBrandBody(brands)}
         </div>
     </div>`;
     return view;
@@ -171,6 +178,7 @@ let Home = {
     <div class="wrapper filter">
       ${await Home.renderFilterButtons()}
       ${await Home.renderFilterCategory()}
+      ${await Home.renderFilterBrand()}
     </div>
     `;
     return view;
@@ -184,7 +192,106 @@ let Home = {
         `;
     return view;
   },
-  // after_render: async () => {},
+  after_render: async () => {
+    // foundLength
+    const foundLength = document.querySelector('.cards-found');
+
+    async function render(getProduct) {
+      let result = await getProduct;
+      return `Found ${await result.length}`;
+    }
+
+    foundLength.innerHTML = await render(getProduct);
+
+    // sort by
+    async function sortBy(products, propertyForSort, direction) {
+      // console.log(products);
+      return await products.sort((productA, productB) => {
+        if (productA[propertyForSort] > productB[propertyForSort]) {
+          return direction === 'asc' ? 1 : -1;
+        } else if (productA[propertyForSort] < productB[propertyForSort]) {
+          return direction === 'desc' ? 1 : -1;
+        } else {
+          return 0;
+        }
+      });
+    }
+
+    document.querySelector('.select-sort').addEventListener('input', async (event) => {
+      let result = await getProduct;
+      let valueEvent = event.target.value;
+      let splitValue = valueEvent.split(' ');
+      getProduct = await sortBy(result, splitValue[0], splitValue[1]);
+      const cardRender = document.querySelector('.cards-table');
+      cardRender.innerHTML = await Home.renderCard(getProduct);
+    });
+
+    // search
+    function searchTo(products, searchString) {
+      return products.filter((searchProduct) => {
+        return (
+          searchProduct.title.toLowerCase().includes(searchString) ||
+          searchProduct.description.toLowerCase().includes(searchString) ||
+          searchProduct.category.toLowerCase().includes(searchString) ||
+          searchProduct.rating.toString().includes(searchString) ||
+          searchProduct.price.toString().includes(searchString) ||
+          searchProduct.discountPercentage.toString().includes(searchString) ||
+          searchProduct.stock.toString().includes(searchString) ||
+          searchProduct.brand.toLowerCase().includes(searchString)
+        );
+      });
+    }
+    document.querySelector('.cards-search').addEventListener('input', async (e) => {
+      let result = await getProduct;
+      let searchString = e.target.value.toLowerCase();
+      const searchFilterProduct = searchTo(result, searchString);
+      const cardRenderTable = document.querySelector('.cards-table');
+      cardRenderTable.innerHTML = await Home.renderCard(searchFilterProduct);
+      foundLength.innerHTML = await render(searchFilterProduct);
+    });
+
+    // sort by category and brand
+
+    let checkboxesCategory = document.querySelectorAll('input[type=checkbox][name=category]');
+    let checkboxesBrand = document.querySelectorAll('input[type=checkbox][name=brand]');
+    const selectedCategories = [];
+    const selectedBrands = [];
+    let filteredProductsList = [];
+
+    function sortTo(products, selectedCategories, selectedBrands) {
+      return products.filter((product) => {
+        return (
+          (selectedCategories.length == 0 || selectedCategories.includes(product.category)) &&
+          (selectedBrands.length == 0 || selectedBrands.includes(product.brand))
+        );
+      });
+    }
+
+    const checked = (checkbox) => {
+      checkbox.addEventListener('change', async function () {
+        const inputID = checkbox.getAttribute('id');
+        const inputName = checkbox.getAttribute('name');
+
+        filteredProductsList = inputName === 'category' ? selectedCategories : selectedBrands;
+
+        if (filteredProductsList.includes(inputID)) {
+          const element = filteredProductsList.indexOf(inputID);
+          filteredProductsList.splice(element, 1);
+        } else {
+          filteredProductsList.push(inputID);
+        }
+        let newResult = await getProduct;
+        const result = sortTo(newResult, selectedCategories, selectedBrands);
+
+        const cardRenderTable = document.querySelector('.cards-table');
+        cardRenderTable.innerHTML = await Home.renderCard(result);
+        foundLength.innerHTML = await render(result);
+      });
+    };
+
+    checkboxesCategory.forEach((checkbox) => checked(checkbox));
+    checkboxesBrand.forEach((checkbox) => checked(checkbox));
+  },
 };
 
 export default Home;
