@@ -11,7 +11,7 @@ import Detail from './views/pages/Detail.js';
 import Header from './views/components/Header.js';
 import Footer from './views/components/Footer.js';
 
-import Utils from './services/Utils.js';
+import Utils from './services/Utils';
 
 const routes = {
   '/': Home,
