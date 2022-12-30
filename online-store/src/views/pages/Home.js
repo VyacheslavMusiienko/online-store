@@ -15,6 +15,7 @@ let getProductList = async () => {
   }
 };
 let getProduct = getProductList();
+let toggle = await false;
 let Home = {
   // cards wrapper
 
@@ -71,6 +72,33 @@ let Home = {
   // render Cards
   renderCard: async (getProduct) => {
     let product = await getProduct;
+
+    if (product.length === 0) {
+      return `<div class="not-found">
+                No products found
+              </div>`;
+    }
+
+    if (toggle === true) {
+      return product
+        .map(
+          (product) => /*html*/ `<div class="card-container">
+                                    <div class="img-container">
+                                        <img class="card-image" src="${product.images[0]}" alt="card-image">
+                                        <div class="card-price">Price: &#8364;${product.price}</div>
+                                        <div class="card-disc-percentage">Discount: ${product.discountPercentage}</div>
+                                        <div class="card-brand">${product.brand}</div>
+                                        <div class="card-rating">Rating: ${product.rating}</div>
+                                        <div class="card-stock">Stock: ${product.stock}</div>
+                                        <div class="btn-container">
+                                            <button class="btn btn-add">Add to cart</button>
+                                            <a href="#/p/${product.id}" class="btn btn-details">Details</a>
+                                        </div>
+                                    </div>
+                                </div>`
+        )
+        .join('');
+    }
     return product
       .map(
         (product) => /*html*/ `<div class="card-container">
@@ -248,6 +276,7 @@ let Home = {
       const cardRenderTable = document.querySelector('.cards-table');
       cardRenderTable.innerHTML = await Home.renderCard(searchFilterProduct);
       foundLength.innerHTML = await render(searchFilterProduct);
+      return (result = searchString);
     });
 
     // sort by category and brand
@@ -282,15 +311,22 @@ let Home = {
         }
         let newResult = await getProduct;
         const result = sortTo(newResult, selectedCategories, selectedBrands);
-
         const cardRenderTable = document.querySelector('.cards-table');
         cardRenderTable.innerHTML = await Home.renderCard(result);
         foundLength.innerHTML = await render(result);
+        return console.log(filteredProductsList);
       });
     };
-
     checkboxesCategory.forEach((checkbox) => checked(checkbox));
     checkboxesBrand.forEach((checkbox) => checked(checkbox));
+
+    document.querySelector('.cards-switch').addEventListener('change', async () => {
+      let result = await getProduct;
+      toggle = toggle === false ? true : false;
+      const cardRenderTable = document.querySelector('.cards-table');
+      cardRenderTable.innerHTML = await Home.renderCard(result);
+      return await toggle;
+    });
   },
 };
 
