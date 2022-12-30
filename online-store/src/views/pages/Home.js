@@ -320,15 +320,14 @@ let Home = {
     checkboxesCategory.forEach((checkbox) => checked(checkbox));
     checkboxesBrand.forEach((checkbox) => checked(checkbox));
   
+    document.querySelector('.cards-switch').addEventListener('change', async () => {
+      let result = await getProduct;
+      toggle = toggle === false ? true : false;
+      const cardRenderTable = document.querySelector('.cards-table');
+      cardRenderTable.innerHTML = await Home.renderCard(result);
+      return await toggle;
+    });
 
-    // let totalMoney = document.querySelector('.cart-total-inner');
-// let total = JSON.parse(localStorage.getItem('total') || '0');
-// totalMoney.innerHTML = total;
-
-
-// let cardsContainer = document.querySelectorAll('.card-container');
-// cardsContainer.forEach(async (el, indx) => {
-// let products = await getProduct;
   const btns = document.querySelectorAll('.btn-add');
   btns.forEach((el, i) => el.addEventListener('click', async () => {
     let products = await getProduct;
@@ -348,17 +347,11 @@ let Home = {
     // localStorage.setItem('total', JSON.stringify(total));
     localStorage.setItem('cart', JSON.stringify([...cart, card]));
   })
-// })
+
 )},
 
-    document.querySelector('.cards-switch').addEventListener('change', async () => {
-      let result = await getProduct;
-      toggle = toggle === false ? true : false;
-      const cardRenderTable = document.querySelector('.cards-table');
-      cardRenderTable.innerHTML = await Home.renderCard(result);
-      return await toggle;
-    });
-  },
+    
+  
 };
 
 export default Home;

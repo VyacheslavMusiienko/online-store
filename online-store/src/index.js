@@ -9,7 +9,7 @@ import Error404 from './views/pages/Error404';
 import Detail from './views/pages/Detail.js';
 
 import Header from './views/components/Header.js';
-import Footer from './views/components/Footer.js';
+import Footer from './views/components/Footer';
 
 import Utils from './services/Utils';
 
