@@ -1,6 +1,8 @@
-let Footer = {
+import { OptionType } from '../../types';
+
+const Footer: OptionType = {
   render: async () => {
-    let view = /*html*/ `
+    const view = /*html*/ `
         <footer class="footer">
           <a class="link images" href="https://rs.school/js/">
             <img class="footer__img" src="./rs_school_js.svg" alt="logo curs">
