@@ -5,7 +5,7 @@ import './assets/scss/cart.scss';
 
 import Home from './views/pages/Home.js';
 import Basket from './views/pages/Basket.js';
-import Error404 from './views/pages/Error404.js';
+import Error404 from './views/pages/Error404';
 import Detail from './views/pages/Detail.js';
 
 import Header from './views/components/Header.js';
