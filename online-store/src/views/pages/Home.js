@@ -319,7 +319,7 @@ let Home = {
     };
     checkboxesCategory.forEach((checkbox) => checked(checkbox));
     checkboxesBrand.forEach((checkbox) => checked(checkbox));
-
+  
     document.querySelector('.cards-switch').addEventListener('change', async () => {
       let result = await getProduct;
       toggle = toggle === false ? true : false;
@@ -327,7 +327,31 @@ let Home = {
       cardRenderTable.innerHTML = await Home.renderCard(result);
       return await toggle;
     });
-  },
+
+  const btns = document.querySelectorAll('.btn-add');
+  btns.forEach((el, i) => el.addEventListener('click', async () => {
+    let products = await getProduct;
+    let id = products[i].id;
+    let title = products[i].title;
+    let description = products[i].description;
+    let price = products[i].price;
+    let image = products[i].images[0];
+    let discount = products[i].discountPercentage;
+    let rating = products[i].rating;
+    let brand = products[i].brand;
+    let stock = products[i].stock;
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    let card = { id, title, price, image, description, discount, brand, rating, stock };
+    // totalMoney.innerHTML = +totalMoney.innerHTML + +price.slice(8);
+    // let total = totalMoney.innerHTML;
+    // localStorage.setItem('total', JSON.stringify(total));
+    localStorage.setItem('cart', JSON.stringify([...cart, card]));
+  })
+
+)},
+
+    
+  
 };
 
 export default Home;

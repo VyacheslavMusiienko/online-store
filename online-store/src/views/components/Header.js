@@ -19,6 +19,7 @@ let Header = {
     return view;
   },
   // after_render: async () => {},
+  
 };
 
 export default Header;
