@@ -1,14 +1,4 @@
 let Header = {
-  renderNav: async () => {
-    let view = `
-                        <div class="navbar-start">
-                            <a class="navbar-item" href="/#/basket">
-                                Basket
-                            </a>
-                        </div>
-    `;
-    return view;
-  },
   render: async () => {
     let view = /*html*/ `
               <header class="header">
@@ -25,7 +15,6 @@ let Header = {
                   </div>
                 </div>
               </header>
-              ${await Header.renderNav()}
         `;
     return view;
   },

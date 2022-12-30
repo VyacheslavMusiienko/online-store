@@ -1,6 +1,8 @@
-let Error404 = {
+import { OptionType } from '../../types';
+
+const Error404: OptionType = {
   render: async () => {
-    let view = /*html*/ `
+    const view = /*html*/ `
             <section class="section">
                 <h1> 404 Error </h1>
             </section>

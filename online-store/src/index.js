@@ -5,13 +5,13 @@ import './assets/scss/cart.scss';
 
 import Home from './views/pages/Home.js';
 import Basket from './views/pages/Basket.js';
-import Error404 from './views/pages/Error404.js';
+import Error404 from './views/pages/Error404';
 import Detail from './views/pages/Detail.js';
 
 import Header from './views/components/Header.js';
 import Footer from './views/components/Footer.js';
 
-import Utils from './services/Utils.js';
+import Utils from './services/Utils';
 
 const routes = {
   '/': Home,
@@ -38,7 +38,7 @@ const router = async () => {
 
   let page = routes[parsedURL] ? routes[parsedURL] : Error404;
   content.innerHTML = await page.render();
-  // await page.after_render();
+  await page.after_render();
 };
 
 window.addEventListener('hashchange', router);

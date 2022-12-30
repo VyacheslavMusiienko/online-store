@@ -1,4 +1,4 @@
-import Utils from '../../services/Utils.js';
+import Utils from '../../services/Utils';
 
 let getSingleProduct = async (id) => {
   const options = {
@@ -65,7 +65,7 @@ let Detail = {
           </div>
         </div>
       </section>`;
-            return view;
+    return view;
   },
   // after_render: async () => {},
 };

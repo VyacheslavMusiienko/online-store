@@ -1,4 +1,4 @@
-import Utils from '../../services/Utils.js';
+import Utils from '../../services/Utils';
 
 let getSingleProduct = async (id) => {
   const options = {
@@ -23,7 +23,9 @@ let Basket = {
     let view = /*html*/ `
             <section class="section details-section">
               <div class='cart-store-container'>
-                <span class='cart-item-number'>${post.idx + 1}</span><img class='image-store-cart' src='${post.image}' alt='product'>
+                <span class='cart-item-number'>${post.idx + 1}</span><img class='image-store-cart' src='${
+      post.image
+    }' alt='product'>
                 <div class='cart-item-title'>${post.title}<div>
                 <div class='cart-item-price'>${post.price}</div>
                 <div class='cart-item-description'>${post.description}</div>
