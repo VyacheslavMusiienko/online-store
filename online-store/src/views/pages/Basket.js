@@ -1,7 +1,7 @@
 let Basket = {
   render: async () => {
     let view = `
-    <div class="cart-container">
+    <section class="cart-container">
         <div class="cart-item cart-container-products">
             <h2 class="text-cart">Products In Cart</h2>
             <div class="cart-item-content"></div>
@@ -19,11 +19,11 @@ let Basket = {
                     <input class="input-summary" type="text" placeholder="Enter promo code">
                 </div>
                 <div class="summary-btn">
-                    <a href="./modal.html" class="btn-buy-now">BUY NOW</a>
+                    <a href="/#/modal" class="btn-buy-now">BUY NOW</a>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
     `;
     return view;
   },

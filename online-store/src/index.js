@@ -2,9 +2,11 @@
 import './assets/scss/index.scss';
 import './assets/scss/description.scss';
 import './assets/scss/cart.scss';
+import './assets/scss/modal.scss';
 
 import Home from './views/pages/Home.js';
 import Basket from './views/pages/Basket.js';
+import Modal from './views/pages/Modal.js';
 import Error404 from './views/pages/Error404';
 import Detail from './views/pages/Detail.js';
 
@@ -17,6 +19,7 @@ const routes = {
   '/': Home,
   '/basket': Basket,
   '/p/:id': Detail,
+  '/modal': Modal,
 };
 
 const router = async () => {
