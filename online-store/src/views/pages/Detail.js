@@ -60,7 +60,7 @@ let Detail = {
             </div>
             <div class="block-summary">
               <button class="descr-btn">Add to cart</button>
-              <a href="./modal.html" class="descr-btn">BUY NOW</a>
+              <a href="/#/modal" class="descr-btn">BUY NOW</a>
             </div>
           </div>
         </div>
