@@ -59,7 +59,9 @@ let Detail = {
               </div>
             </div>
             <div class="block-summary">
+
               <button class="descr-btn" id="add_to_cart">Add to cart</button>
+
               <a href="/#/modal" class="descr-btn">BUY NOW</a>
             </div>
           </div>
