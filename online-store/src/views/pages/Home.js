@@ -328,6 +328,10 @@ let Home = {
       return await toggle;
     });
 
+  const totalMoney = document.querySelector('.cart-total-inner');
+  let total = JSON.parse(localStorage.getItem('total') || '0');
+  totalMoney.innerHTML = total;
+
   const btns = document.querySelectorAll('.btn-add');
   btns.forEach((el, i) => el.addEventListener('click', async () => {
     let products = await getProduct;
@@ -342,9 +346,10 @@ let Home = {
     let stock = products[i].stock;
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
     let card = { id, title, price, image, description, discount, brand, rating, stock };
-    // totalMoney.innerHTML = +totalMoney.innerHTML + +price.slice(8);
-    // let total = totalMoney.innerHTML;
-    // localStorage.setItem('total', JSON.stringify(total));
+    let total = document.querySelector('.cart-total-inner');
+    total.innerHTML = +total.innerHTML + +products[i].price;
+    let result = total.innerHTML;
+    localStorage.setItem('total', JSON.stringify(result));
     localStorage.setItem('cart', JSON.stringify([...cart, card]));
   })
 
