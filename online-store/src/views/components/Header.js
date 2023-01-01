@@ -18,7 +18,11 @@ let Header = {
         `;
     return view;
   },
-  // after_render: async () => {},
+  after_render: async () => {
+    const total = document.querySelector('.cart-total-inner');
+    let totalStorage = JSON.parse(localStorage.getItem('total') || '0');
+    total.innerHTML = totalStorage;
+  },
   
 };
 
