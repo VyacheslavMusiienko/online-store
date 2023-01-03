@@ -25,7 +25,7 @@ let Modal = {
             <div class="credit_card_details">
                 <h2>Credit card details</h2>
                 <div>
-                    <div class="logo-card-container"><img class="card-logo" src="" width="60" height="30">
+                    <div class="logo-card-container"><img class="card-logo" src="no-logo-featured.jpg" width="60" height="30">
                     <input class="input input_card" type="text" name="card-num" placeholder="0000 0000 0000 0000" size="18" id="card-number" minlength="19" maxlength="19"><span class="error error-card"></span>
                     </div>
                 </div>

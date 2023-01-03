@@ -2,15 +2,15 @@ main {
   min-height: 100vh;
 }
 
-.second-container {
-  width: 30%;
-  height: auto;
-  margin: 10px;
-}
+// .second-container {
+//   width: 30%;
+//   height: auto;
+//   margin: 10px;
+// }
 
 .card-container {
   text-align: center;
-  width: 30%;
+  width: 31.2%;
   height: 350px;
   background-color: $color_wave;
   border: 1px solid $color_deep-water;
@@ -18,7 +18,12 @@ main {
   border-radius: 6px;
 }
 
+.height {
+  height: 250px;
+}
+
 .img-container {
+  position: relative;
   width: 100%;
   height: 200px;
 }
@@ -33,14 +38,12 @@ main {
 }
 
 .card-price {
-  position: relative;
+  position: absolute;
   background-color: $color_sea-foam;
   border-radius: 4px;
   width: 120px;
-  margin: 6px;
-  bottom: 0px;
-  left: 5px;
-  top: -48px;
+  bottom: 10px;
+  left: 10px;
   padding: 5px;
 }
 
@@ -51,7 +54,7 @@ main {
   text-align: center;
   width: 95%;
   background-color: $color_sea-foam;
-  margin: -30px auto;
+  margin: 0px auto;
   margin-bottom: 2px;
   border-radius: 5px;
   height: 40px;
@@ -70,76 +73,48 @@ main {
 }
 
 .card-disc-percentage {
-  position: relative;
+  position: absolute;
   background-color: $color_sea-foam;
   border-radius: 4px;
   width: 120px;
   margin: 6px;
-  bottom: 0px;
+  bottom: 35px;
   left: 5px;
-  top: -180px;
   padding: 5px;
 }
 
 .card-brand {
-  position: relative;
+  position: absolute;
   background-color: $color_sea-foam;
   border-radius: 4px;
   width: 120px;
   height: 24px;
   margin: 6px;
-  bottom: 0px;
+  bottom: 67px;
   left: 5px;
-  top: -245px;
   padding: 5px;
   overflow: hidden;
 }
 
 .card-rating {
-  position: relative;
+  position: absolute;
   background-color: $color_sea-foam;
   border-radius: 4px;
   width: 120px;
   margin: 6px;
-  bottom: 0px;
+  bottom: 96px;
   left: 5px;
-  top: -310px;
   padding: 5px;
 }
 
 .card-stock {
-  position: relative;
+  position: absolute;
   background-color: $color_sea-foam;
   border-radius: 4px;
   width: 120px;
   margin: 6px;
-  bottom: 0px;
+  bottom: 128px;
   left: 5px;
-  top: -374px;
-  padding: 5px;
-}
-
-.btn-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  border-radius: 4px;
-  width: 100%;
-  bottom: 0px;
-  left: 5px;
-  top: -144px;
-  padding: 5px;
-}
-
-.btn-container-second {
-  position: relative;
-  display: flex;
-  justify-content: end;
-  border-radius: 4px;
-  width: 100%;
-  bottom: 0px;
-  left: -15px;
-  top: -80px;
   padding: 5px;
 }
 
@@ -167,8 +142,9 @@ main {
   background-color: $color_deep-water;
 }
 .not-found{
+  text-align: center;
   display: inline-block;
   padding: 30px;
-  width: 100%;
   font-size: 24px;
+  width: calc(100vw - 480px);
 }
