@@ -44,12 +44,12 @@ let Basket = {
         <span class='cart-item-number'>${idx + 1}</span><img class='image-store-cart' src='${image}' alt='product'>
           <div class='cart-id'>${id}</div>
           <div class='cart-item-title'>${title}<div>
-          <div class='cart-item-price'>${price}</div>
+          <div class='cart-item-price'>Price: &#8364;&nbsp;${price}</div>
           <div class='cart-item-description'>${description}</div>
-          <div class='cart-item-discount'>${discount}</div>
-          <div class='cart-item-brand'>${brand}</div>
-          <div class='cart-item-rating'>${rating}</div>
-          <div class='cart-item-stock'>${stock}</div>
+          <div class='cart-item-discount'><span class="title">Discount percentage: </span>${discount}</div>
+          <div class='cart-item-brand'><span class="title">Brand: </span>${brand}</div>
+          <div class='cart-item-rating'><span class="title">Rating: </span>${rating}</div>
+          <div class='cart-item-stock'><span class="title">Stock: </span>${stock}</div>
           <div class='buttons-container'>
             <span class='text-items'>1</span><button class='btn-add button-item'>+</button><button class='btn-delete button-item'>-</button>
           </div>

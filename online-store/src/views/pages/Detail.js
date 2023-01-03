@@ -27,9 +27,10 @@ let Detail = {
               <div class="flex-container">
               <h2 class="description-title">${post.title}</h2>
               <div class="block-images">
-                <div class="secondary-images-box"></div>
                 <div class="container-image-descr">
                 <img class="main-image-description" src="${post.images[0]}" alt="product-image">
+                </div>
+                <div class="secondary-images-box">
                 </div>
               </div>
             <div class="block-description">
@@ -69,24 +70,44 @@ let Detail = {
       </section>`;
     return view;
   },
+  renderImages: async () => {
+    let request = Utils.parseRequestURL();
+    let post = await getSingleProduct(request.id);
+    let arr = post.images;
+    arr.forEach(el => {
+    const img = document.createElement('img');
+    img.classList.add("secondary-image-description");
+    img.src = el;
+    document.querySelector(".secondary-images-box").append(img)
+      })
+  },
+
   after_render: async () => {
+    await Detail.renderImages()
     let request = Utils.parseRequestURL();
     let post = await getSingleProduct(request.id);
     const addToCartBtn = document.querySelector('#add_to_cart');
-    addToCartBtn.addEventListener('click', () => {
-      const id = post.id;
-      const title = post.title;
-      const image = post.images[0];
-      const price = post.price;
-      const description = post.description;
-      const discount = post.discountPercentage;
-      const rating = post.rating;
-      const stock = post.stock;
-      const brand = post.brand;
-      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      let card = { id, title, price, image, description, discount, brand, rating, stock };
-      localStorage.setItem('cart', JSON.stringify([...cart, card]));
-    });
+      addToCartBtn.addEventListener('click', () => {
+        const id = post.id;
+        const title = post.title;
+        const image = post.images[0];
+        const price = post.price;
+        const description = post.description;
+        const discount = post.discountPercentage;
+        const rating = post.rating;
+        const stock = post.stock;
+        const brand = post.brand;
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let card = { id, title, price, image, description, discount, brand, rating, stock };
+        localStorage.setItem('cart', JSON.stringify([...cart, card]));
+      });
+
+      const secondaryImages = document.querySelectorAll('.secondary-image-description');
+      const mainImage = document.querySelector('.main-image-description');
+      
+      secondaryImages.forEach(el => el.addEventListener('click', (e) => {
+        mainImage.src = e.target.src;
+      }))
   },
 };
 

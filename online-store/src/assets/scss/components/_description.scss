@@ -6,13 +6,12 @@
 .description-container {
   position: relative;
   display: flex;
-  // flex-direction: row;
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 4% auto;
+  margin: 7% auto;
   background-color: $color_deep-water;
-  width: 100%;
+  width: 90%;
   height: fit-content;
   padding: 20px;
   border-radius: 30px;
@@ -38,16 +37,44 @@
 }
 
 .container-image-descr {
-  background-color: aliceblue;
-  width: 300px;
-  height: auto;
+  width: 350px;
+  height: 250px;
   border-radius: 10px;
+  padding: 5px;
+  overflow: hidden;
+  // background-color: $color_ocean;
+  // background-size: cover;
 }
 
 .main-image-description {
-  width: 100%;
+  max-width: 300px;
   height: 100%;
   border-radius: 10px;
+  margin-right: 50px;
+  background-size: cover;
+  // background-position: center;
+
+}
+
+.secondary-images-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  border-radius: 20px;
+}
+
+.secondary-image-description {
+  width: 30%;
+  border-radius: 4px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.block-images{
+  width: 20%;
+  margin: 20px;
 }
 
 .block-summary {
@@ -68,7 +95,7 @@
 }
 
 .block-description {
-  width: 50%;
+  width: 40%;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -91,7 +118,7 @@
 .flex-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 
