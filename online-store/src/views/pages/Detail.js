@@ -73,20 +73,20 @@ let Detail = {
     let request = Utils.parseRequestURL();
     let post = await getSingleProduct(request.id);
     const addToCartBtn = document.querySelector('#add_to_cart');
-      addToCartBtn.addEventListener('click', () => {
-        const id = post.id;
-        const title = post.title;
-        const image = post.images[0];
-        const price = post.price;
-        const description = post.description;
-        const discount = post.discountPercentage;
-        const rating = post.rating;
-        const stock = post.stock;
-        const brand = post.brand;
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        let card = { id, title, price, image, description, discount, brand, rating, stock };
-        localStorage.setItem('cart', JSON.stringify([...cart, card]));
-      })
+    addToCartBtn.addEventListener('click', () => {
+      const id = post.id;
+      const title = post.title;
+      const image = post.images[0];
+      const price = post.price;
+      const description = post.description;
+      const discount = post.discountPercentage;
+      const rating = post.rating;
+      const stock = post.stock;
+      const brand = post.brand;
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      let card = { id, title, price, image, description, discount, brand, rating, stock };
+      localStorage.setItem('cart', JSON.stringify([...cart, card]));
+    });
   },
 };
 
