@@ -247,7 +247,7 @@ let Home = {
 
     const addQueryParam = (key, value) => {
       const url = new URL(window.location.href);
-      if (value.length) {
+      if (String(value) === 'true' || String(value) === 'false' || value.length) {
         url.searchParams.set(key, value);
       } else {
         url.searchParams.delete(key);
@@ -294,6 +294,7 @@ let Home = {
 
     async function sort() {
       let result = await getProduct;
+      // toggle = false;
 
       const url = new URL(window.location.href);
 
@@ -319,9 +320,11 @@ let Home = {
           }
           result = await sortTo(result, keySortCategory, keySortBrand);
         }
-      }
 
-      toggle = toggle === false ? true : false;
+        // if (key.length === 0 || key === 'switch') {
+        //   let keySort = url.searchParams.get(key);
+        // }
+      }
 
       const cardRender = document.querySelector('.cards-table');
       cardRender.innerHTML = await Home.renderCard(result);
@@ -369,14 +372,16 @@ let Home = {
     };
     checkboxesCategory.forEach((checkbox) => checked(checkbox));
     checkboxesBrand.forEach((checkbox) => checked(checkbox));
-  
+
     document.querySelector('.cards-switch').addEventListener('change', async () => {
+      toggle = toggle === false ? true : false;
+      addQueryParam('switch', toggle);
       sort();
     });
 
-  const totalMoney = document.querySelector('.cart-total-inner');
-  let total = JSON.parse(localStorage.getItem('total') || '0');
-  totalMoney.innerHTML = total;
+    const totalMoney = document.querySelector('.cart-total-inner');
+    let total = JSON.parse(localStorage.getItem('total') || '0');
+    totalMoney.innerHTML = total;
 
 
 
