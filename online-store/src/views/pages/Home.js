@@ -247,7 +247,7 @@ let Home = {
 
     const addQueryParam = (key, value) => {
       const url = new URL(window.location.href);
-      if (value.length) {
+      if (String(value) === 'true' || String(value) === 'false' || value.length) {
         url.searchParams.set(key, value);
       } else {
         url.searchParams.delete(key);
@@ -294,6 +294,7 @@ let Home = {
 
     async function sort() {
       let result = await getProduct;
+      // toggle = false;
 
       const url = new URL(window.location.href);
 
@@ -319,9 +320,11 @@ let Home = {
           }
           result = await sortTo(result, keySortCategory, keySortBrand);
         }
-      }
 
-      toggle = toggle === false ? true : false;
+        // if (key.length === 0 || key === 'switch') {
+        //   let keySort = url.searchParams.get(key);
+        // }
+      }
 
       const cardRender = document.querySelector('.cards-table');
       cardRender.innerHTML = await Home.renderCard(result);
@@ -369,41 +372,40 @@ let Home = {
     };
     checkboxesCategory.forEach((checkbox) => checked(checkbox));
     checkboxesBrand.forEach((checkbox) => checked(checkbox));
-  
+
     document.querySelector('.cards-switch').addEventListener('change', async () => {
+      toggle = toggle === false ? true : false;
+      addQueryParam('switch', toggle);
       sort();
     });
 
-  const totalMoney = document.querySelector('.cart-total-inner');
-  let total = JSON.parse(localStorage.getItem('total') || '0');
-  totalMoney.innerHTML = total;
+    const totalMoney = document.querySelector('.cart-total-inner');
+    let total = JSON.parse(localStorage.getItem('total') || '0');
+    totalMoney.innerHTML = total;
 
-
-
-  const btns = document.querySelectorAll('.btn-add');
-  btns.forEach((el, i) => el.addEventListener('click', async (e) => {
-    e.target.innerHTML = e.target.innerHTML === 'Add to cart' ? 'Drop from cart' : 'Add to cart';
-    let products = await getProduct;
-    let id = products[i].id;
-    let title = products[i].title;
-    let description = products[i].description;
-    let price = products[i].price;
-    let image = products[i].images[0];
-    let discount = products[i].discountPercentage;
-    let rating = products[i].rating;
-    let brand = products[i].brand;
-    let stock = products[i].stock;
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    let card = { id, title, price, image, description, discount, brand, rating, stock };
-    let total = document.querySelector('.cart-total-inner');
-    total.innerHTML = +total.innerHTML + +products[i].price;
-    let result = total.innerHTML;
-    localStorage.setItem('total', JSON.stringify(result));
-    localStorage.setItem('cart', JSON.stringify([...cart, card]));
-  })
-
-)}
-
+    const btns = document.querySelectorAll('.btn-add');
+    btns.forEach((el, i) =>
+      el.addEventListener('click', async () => {
+        let products = await getProduct;
+        let id = products[i].id;
+        let title = products[i].title;
+        let description = products[i].description;
+        let price = products[i].price;
+        let image = products[i].images[0];
+        let discount = products[i].discountPercentage;
+        let rating = products[i].rating;
+        let brand = products[i].brand;
+        let stock = products[i].stock;
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let card = { id, title, price, image, description, discount, brand, rating, stock };
+        let total = document.querySelector('.cart-total-inner');
+        total.innerHTML = +total.innerHTML + +products[i].price;
+        let result = total.innerHTML;
+        localStorage.setItem('total', JSON.stringify(result));
+        localStorage.setItem('cart', JSON.stringify([...cart, card]));
+      })
+    );
+  },
 };
 
 export default Home;

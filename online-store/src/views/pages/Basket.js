@@ -55,7 +55,7 @@ let Basket = {
           </div>
           </div>`;
       });
-    };
+    }
     const btnAdd = document.querySelectorAll('.btn-add');
     const btnDelete = document.querySelectorAll('.btn-delete');
     const carts = document.querySelectorAll('.cart-store-container');
@@ -65,42 +65,47 @@ let Basket = {
 
     let totalStorage = JSON.parse(localStorage.getItem('total') || '0');
     totalMoney.innerHTML = totalStorage;
-      carts.forEach((el, i) => el.addEventListener('click', async function res(e) {
-      if (e.target.previousSibling.previousSibling.innerHTML === '1' && e.target.innerHTML === '-') {
-        let y = await document.querySelectorAll('.cart-id')[i].innerHTML;
-        console.log(y)
-        let cartStorage = JSON.parse(localStorage.getItem('cart'));
-        let x = await cartStorage.filter((el) => el.id.toString() !== y)
-        localStorage.setItem('cart', JSON.stringify(x));
-        this.remove();
-      }
-      else {
-        if (e.target.innerHTML === '-') {
-          e.target.previousSibling.previousSibling.innerHTML -= 1;
-      }
-    }
-    }))
-    btnDelete.forEach((el,i) => el.addEventListener('click', async function () {
-      this.previousSibling.innerHTML = +(this.previousSibling.innerHTML) - 1;
-      if (document.querySelectorAll('.cart-item-price')) {
+    carts.forEach((el, i) =>
+      el.addEventListener('click', async function res(e) {
+        if (e.target.previousSibling.previousSibling.innerHTML === '1' && e.target.innerHTML === '-') {
+          let y = await document.querySelectorAll('.cart-id')[i].innerHTML;
+          console.log(y);
+          let cartStorage = JSON.parse(localStorage.getItem('cart'));
+          let x = await cartStorage.filter((el) => el.id.toString() !== y);
+          localStorage.setItem('cart', JSON.stringify(x));
+          this.remove();
+        } else {
+          if (e.target.innerHTML === '-') {
+            e.target.previousSibling.previousSibling.innerHTML -= 1;
+          }
+        }
+      })
+    );
+    btnDelete.forEach((el, i) =>
+      el.addEventListener('click', async function () {
+        this.previousSibling.innerHTML = +this.previousSibling.innerHTML - 1;
+        if (document.querySelectorAll('.cart-item-price')) {
+          let addTotal = document.querySelectorAll('.cart-item-price')[i].innerHTML;
+          totalMoney.innerHTML = +totalMoney.innerHTML - +addTotal;
+          console.log(totalMoney.innerHTML);
+          let currTotal = totalMoney.innerHTML;
+          localStorage.setItem('total', JSON.stringify(currTotal));
+          total.innerHTML = currTotal;
+        }
+      })
+    );
+
+    btnAdd.forEach((el, i) =>
+      el.addEventListener('click', function () {
+        this.previousSibling.innerHTML = +this.previousSibling.innerHTML + 1;
         let addTotal = document.querySelectorAll('.cart-item-price')[i].innerHTML;
-        totalMoney.innerHTML = +totalMoney.innerHTML - +addTotal;
-        console.log(totalMoney.innerHTML)
-        let currTotal = totalMoney.innerHTML;
-        localStorage.setItem('total', JSON.stringify(currTotal));
-        total.innerHTML = currTotal;
-      }
-    }))
-    
-    btnAdd.forEach((el,i) => el.addEventListener('click', function () {
-      this.previousSibling.innerHTML = +(this.previousSibling.innerHTML) + 1;
-      let addTotal = document.querySelectorAll('.cart-item-price')[i].innerHTML;
-      console.log(addTotal)
-      totalMoney.innerHTML = +totalMoney.innerHTML + +addTotal;
-      let currentTotal = +totalMoney.innerHTML;
-      localStorage.setItem('total', JSON.stringify(currentTotal));
-      total.innerHTML = currentTotal;
-    }))
+        console.log(addTotal);
+        totalMoney.innerHTML = +totalMoney.innerHTML + +addTotal;
+        let currentTotal = +totalMoney.innerHTML;
+        localStorage.setItem('total', JSON.stringify(currentTotal));
+        total.innerHTML = currentTotal;
+      })
+    );
     total.innerHTML = totalStorage;
   },
 };
