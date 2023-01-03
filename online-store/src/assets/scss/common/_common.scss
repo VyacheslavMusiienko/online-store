@@ -7,6 +7,10 @@
   padding: 0;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 ul,
 p {
   margin: 0;
@@ -20,6 +24,7 @@ ol {
 
 .d-flex{
   display: flex;
+  width: 100%;
 }
 
 .wrapper{
@@ -37,7 +42,7 @@ ol {
   border-radius: 4px;
   cursor: pointer;
   height: 30px;
-  width: 45%;
+  width: 40%;
   text-decoration: none;
 }
 

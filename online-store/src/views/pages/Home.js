@@ -81,7 +81,7 @@ let Home = {
     if (toggle === true) {
       return product
         .map(
-          (product) => /*html*/ `<div class="card-container">
+          (product) => /*html*/ `<div class="card-container height">
                                     <div class="img-container">
                                         <img class="card-image" src="${product.images[0]}" alt="card-image">
                                         <div class="card-price">Price: &#8364;${product.price}</div>
@@ -90,8 +90,8 @@ let Home = {
                                         <div class="card-rating">Rating: ${product.rating}</div>
                                         <div class="card-stock">Stock: ${product.stock}</div>
                                         <div class="btn-container">
-                                            <button class="btn btn-add">Add to cart</button>
-                                            <a href="#/p/${product.id}" class="btn btn-details">Details</a>
+                                        <button class="btn btn-add">Add to cart</button>
+                                        <button class="btn"><a href="#/p/${product.id}" class="btn btn-details">Details</a></button>
                                         </div>
                                     </div>
                                 </div>`
@@ -112,7 +112,7 @@ let Home = {
                                         <div class="card-stock">Stock: ${product.stock}</div>
                                         <div class="btn-container">
                                             <button class="btn btn-add">Add to cart</button>
-                                            <a href="#/p/${product.id}" class="btn btn-details">Details</a>
+                                            <button class="btn"><a href="#/p/${product.id}" class="btn btn-details">Details</a></button>
                                         </div>
                                     </div>
                                 </div>`
@@ -378,8 +378,11 @@ let Home = {
   let total = JSON.parse(localStorage.getItem('total') || '0');
   totalMoney.innerHTML = total;
 
+
+
   const btns = document.querySelectorAll('.btn-add');
-  btns.forEach((el, i) => el.addEventListener('click', async () => {
+  btns.forEach((el, i) => el.addEventListener('click', async (e) => {
+    e.target.innerHTML = e.target.innerHTML === 'Add to cart' ? 'Drop from cart' : 'Add to cart';
     let products = await getProduct;
     let id = products[i].id;
     let title = products[i].title;
@@ -399,10 +402,8 @@ let Home = {
     localStorage.setItem('cart', JSON.stringify([...cart, card]));
   })
 
-)},
+)}
 
-    
-  
 };
 
 export default Home;
