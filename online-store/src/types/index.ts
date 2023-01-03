@@ -1,2 +1,2 @@
-type OptionType = { [key: string]: () => Promise<string> };
+type OptionType = { [key: string]: () => Promise<void | string> };
 export { OptionType };

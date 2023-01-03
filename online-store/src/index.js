@@ -10,7 +10,7 @@ import Modal from './views/pages/Modal.js';
 import Error404 from './views/pages/Error404';
 import Detail from './views/pages/Detail.js';
 
-import Header from './views/components/Header.js';
+import Header from './views/components/Header';
 import Footer from './views/components/Footer';
 
 import Utils from './services/Utils';

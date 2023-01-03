@@ -1,6 +1,8 @@
-let Header = {
+import { OptionType } from '../../types';
+
+const Header: OptionType = {
   render: async () => {
-    let view = /*html*/ `
+    const view = /*html*/ `
               <header class="header">
                 <div class="container">
                   <div class="logo_and_store">
@@ -19,11 +21,10 @@ let Header = {
     return view;
   },
   after_render: async () => {
-    const total = document.querySelector('.cart-total-inner');
-    let totalStorage = JSON.parse(localStorage.getItem('total') || '0');
+    const total = document.querySelector('.cart-total-inner') as HTMLElement;
+    const totalStorage = JSON.parse(localStorage.getItem('total') || '0');
     total.innerHTML = totalStorage;
   },
-  
 };
 
 export default Header;
