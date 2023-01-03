@@ -8,7 +8,6 @@ let getProductList = async () => {
   try {
     const response = await fetch(`https://dummyjson.com/products?limit=100`, options);
     const json = await response.json();
-    // console.log(json)
     return json.products;
   } catch (err) {
     console.log('Error getting documents', err);
@@ -221,6 +220,21 @@ let Home = {
     return view;
   },
   after_render: async () => {
+    // copy button
+    let copy = document.querySelector('.copy');
+    copy.addEventListener('click', () => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location).then(
+          function () {
+            alert('Text copied to the clipboard');
+          },
+          function (e) {
+            alert('Error when copying: ' + e);
+          }
+        );
+      } else alert('Your browser does not support Clipboard');
+    });
+
     // foundLength
     const foundLength = document.querySelector('.cards-found');
 
@@ -231,9 +245,18 @@ let Home = {
 
     foundLength.innerHTML = await render(getProduct);
 
+    const addQueryParam = (key, value) => {
+      const url = new URL(window.location.href);
+      if (value.length) {
+        url.searchParams.set(key, value);
+      } else {
+        url.searchParams.delete(key);
+      }
+      window.history.pushState({}, '', url.toString());
+    };
+
     // sort by
     async function sortBy(products, propertyForSort, direction) {
-      // console.log(products);
       return await products.sort((productA, productB) => {
         if (productA[propertyForSort] > productB[propertyForSort]) {
           return direction === 'asc' ? 1 : -1;
@@ -244,16 +267,6 @@ let Home = {
         }
       });
     }
-
-    document.querySelector('.select-sort').addEventListener('input', async (event) => {
-      let result = await getProduct;
-      let valueEvent = event.target.value;
-      let splitValue = valueEvent.split(' ');
-      getProduct = await sortBy(result, splitValue[0], splitValue[1]);
-      const cardRender = document.querySelector('.cards-table');
-      cardRender.innerHTML = await Home.renderCard(getProduct);
-    });
-
     // search
     function searchTo(products, searchString) {
       return products.filter((searchProduct) => {
@@ -269,14 +282,63 @@ let Home = {
         );
       });
     }
-    document.querySelector('.cards-search').addEventListener('input', async (e) => {
+    // sortTo
+    function sortTo(products, selectedCategories, selectedBrands) {
+      return products.filter((product) => {
+        return (
+          (selectedCategories.length === 0 || selectedCategories.includes(product.category)) &&
+          (selectedBrands.length === 0 || selectedBrands.includes(product.brand))
+        );
+      });
+    }
+
+    async function sort() {
       let result = await getProduct;
+
+      const url = new URL(window.location.href);
+
+      for (const key of url.searchParams.keys()) {
+        if (key === 'sort') {
+          let keySort = url.searchParams.get(key).split(' ');
+          result = await sortBy(result, keySort[0], keySort[1]);
+        }
+
+        if (key.length === 0 || key === 'search') {
+          let keySort = url.searchParams.get(key);
+          result = await searchTo(result, keySort);
+        }
+
+        if (key.length === 0 || key === 'category' || key === 'brand') {
+          let keySortCategory = [];
+          let keySortBrand = [];
+          if (key === 'category') {
+            keySortCategory = url.searchParams.get(key).split(',');
+          }
+          if (key === 'brand') {
+            keySortBrand = url.searchParams.get(key).split(',');
+          }
+          result = await sortTo(result, keySortCategory, keySortBrand);
+        }
+      }
+
+      toggle = toggle === false ? true : false;
+
+      const cardRender = document.querySelector('.cards-table');
+      cardRender.innerHTML = await Home.renderCard(result);
+
+      foundLength.innerHTML = await render(result);
+    }
+
+    document.querySelector('.select-sort').addEventListener('input', async (event) => {
+      let valueEvent = event.target.value;
+      addQueryParam('sort', valueEvent);
+      sort();
+    });
+
+    document.querySelector('.cards-search').addEventListener('input', async (e) => {
       let searchString = e.target.value.toLowerCase();
-      const searchFilterProduct = searchTo(result, searchString);
-      const cardRenderTable = document.querySelector('.cards-table');
-      cardRenderTable.innerHTML = await Home.renderCard(searchFilterProduct);
-      foundLength.innerHTML = await render(searchFilterProduct);
-      return (result = searchString);
+      addQueryParam('search', searchString);
+      sort();
     });
 
     // sort by category and brand
@@ -286,15 +348,6 @@ let Home = {
     const selectedCategories = [];
     const selectedBrands = [];
     let filteredProductsList = [];
-
-    function sortTo(products, selectedCategories, selectedBrands) {
-      return products.filter((product) => {
-        return (
-          (selectedCategories.length == 0 || selectedCategories.includes(product.category)) &&
-          (selectedBrands.length == 0 || selectedBrands.includes(product.brand))
-        );
-      });
-    }
 
     const checked = (checkbox) => {
       checkbox.addEventListener('change', async function () {
@@ -309,23 +362,16 @@ let Home = {
         } else {
           filteredProductsList.push(inputID);
         }
-        let newResult = await getProduct;
-        const result = sortTo(newResult, selectedCategories, selectedBrands);
-        const cardRenderTable = document.querySelector('.cards-table');
-        cardRenderTable.innerHTML = await Home.renderCard(result);
-        foundLength.innerHTML = await render(result);
-        return console.log(filteredProductsList);
+        addQueryParam('category', selectedCategories);
+        addQueryParam('brand', selectedBrands);
+        sort();
       });
     };
     checkboxesCategory.forEach((checkbox) => checked(checkbox));
     checkboxesBrand.forEach((checkbox) => checked(checkbox));
 
     document.querySelector('.cards-switch').addEventListener('change', async () => {
-      let result = await getProduct;
-      toggle = toggle === false ? true : false;
-      const cardRenderTable = document.querySelector('.cards-table');
-      cardRenderTable.innerHTML = await Home.renderCard(result);
-      return await toggle;
+      sort();
     });
   },
 };
