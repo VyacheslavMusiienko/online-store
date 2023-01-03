@@ -383,32 +383,29 @@ let Home = {
     let total = JSON.parse(localStorage.getItem('total') || '0');
     totalMoney.innerHTML = total;
 
-
-
-  const btns = document.querySelectorAll('.btn-add');
-  btns.forEach((el, i) => el.addEventListener('click', async (e) => {
-    e.target.innerHTML = e.target.innerHTML === 'Add to cart' ? 'Drop from cart' : 'Add to cart';
-    let products = await getProduct;
-    let id = products[i].id;
-    let title = products[i].title;
-    let description = products[i].description;
-    let price = products[i].price;
-    let image = products[i].images[0];
-    let discount = products[i].discountPercentage;
-    let rating = products[i].rating;
-    let brand = products[i].brand;
-    let stock = products[i].stock;
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    let card = { id, title, price, image, description, discount, brand, rating, stock };
-    let total = document.querySelector('.cart-total-inner');
-    total.innerHTML = +total.innerHTML + +products[i].price;
-    let result = total.innerHTML;
-    localStorage.setItem('total', JSON.stringify(result));
-    localStorage.setItem('cart', JSON.stringify([...cart, card]));
-  })
-
-)}
-
+    const btns = document.querySelectorAll('.btn-add');
+    btns.forEach((el, i) =>
+      el.addEventListener('click', async () => {
+        let products = await getProduct;
+        let id = products[i].id;
+        let title = products[i].title;
+        let description = products[i].description;
+        let price = products[i].price;
+        let image = products[i].images[0];
+        let discount = products[i].discountPercentage;
+        let rating = products[i].rating;
+        let brand = products[i].brand;
+        let stock = products[i].stock;
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let card = { id, title, price, image, description, discount, brand, rating, stock };
+        let total = document.querySelector('.cart-total-inner');
+        total.innerHTML = +total.innerHTML + +products[i].price;
+        let result = total.innerHTML;
+        localStorage.setItem('total', JSON.stringify(result));
+        localStorage.setItem('cart', JSON.stringify([...cart, card]));
+      })
+    );
+  },
 };
 
 export default Home;
