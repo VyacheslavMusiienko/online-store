@@ -380,12 +380,23 @@ let Home = {
     });
 
     const totalMoney = document.querySelector('.cart-total-inner');
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const basketProductsCounter = document.querySelector('.header-basket-number');
+    basketProductsCounter.innerHTML = cart.length;
     let total = JSON.parse(localStorage.getItem('total') || '0');
+    let selected = JSON.parse(localStorage.getItem('selectedItems') || '[]');
+    selected = [...new Set(selected)];
+    // console.log([...new Set(selected)])
+    let cardsContainer = document.querySelectorAll('.card-container');
+    cardsContainer.forEach((el, i) => {
+      el.style.backgroundColor = selected[i] ? "mediumseagreen" : "";
+    })
     totalMoney.innerHTML = total;
 
     const btns = document.querySelectorAll('.btn-add');
     btns.forEach((el, i) =>
-      el.addEventListener('click', async () => {
+      el.addEventListener('click', async (e) => {
+        e.target.innerHTML = e.target.innerHTML === "Add to cart" ? "Drop from cart" : "Add to cart";
         let products = await getProduct;
         let id = products[i].id;
         let title = products[i].title;
@@ -399,10 +410,35 @@ let Home = {
         let cart = JSON.parse(localStorage.getItem('cart') || '[]');
         let card = { id, title, price, image, description, discount, brand, rating, stock };
         let total = document.querySelector('.cart-total-inner');
-        total.innerHTML = +total.innerHTML + +products[i].price;
-        let result = total.innerHTML;
-        localStorage.setItem('total', JSON.stringify(result));
-        localStorage.setItem('cart', JSON.stringify([...cart, card]));
+        let expression = cart.some((el) => el.id === card.id)
+        if (expression && e.target.innerHTML === "Drop from cart"){
+          total.innerHTML = +total.innerHTML + +products[i].price;
+          let result = total.innerHTML;
+          localStorage.setItem('total', JSON.stringify(result));
+          cardsContainer[id - 1].style.backgroundColor = "";
+          return;
+        }
+        if(e.target.innerHTML === "Add to cart") {
+          total.innerHTML = +total.innerHTML - +products[i].price;
+          let result = total.innerHTML;
+          localStorage.setItem('total', JSON.stringify(result));
+          let z = cart.filter(el => el.id !== card.id)
+          localStorage.setItem('cart', JSON.stringify(z));
+          cardsContainer[id - 1].style.backgroundColor = "";
+          selected = selected.filter(el => el === card.id - 1);
+          localStorage.setItem('selectedItems', JSON.stringify([...new Set(selected)]));
+          basketProductsCounter.innerHTML = +basketProductsCounter.innerHTML - 1;
+        }
+        if(e.target.innerHTML === "Drop from cart") {
+          total.innerHTML = +total.innerHTML + +products[i].price;
+          let result = total.innerHTML;
+          selected.push(card.id)
+          localStorage.setItem('selectedItems', JSON.stringify([...new Set(selected)]))
+          localStorage.setItem('total', JSON.stringify(result));
+          localStorage.setItem('cart', JSON.stringify([...cart, card]));
+          cardsContainer[id - 1].style.backgroundColor = "mediumseagreen";
+          basketProductsCounter.innerHTML = +basketProductsCounter.innerHTML + 1;
+        }
       })
     );
   },
