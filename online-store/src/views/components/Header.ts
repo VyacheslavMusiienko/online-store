@@ -14,6 +14,7 @@ const Header: OptionType = {
                   </div>
                   <div class="basket-container">
                     <p><a href="/#/basket"><img class="header-basket" src="./cart.svg" width="80" height="80" alt="logo footer"></a></p>
+                    <div class="header-basket-number">1</div>
                   </div>
                 </div>
               </header>

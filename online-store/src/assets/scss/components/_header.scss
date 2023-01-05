@@ -47,10 +47,24 @@
 }
 
 .header-basket {
+    position: relative;
     background-color: $color_sea-foam;
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
+}
+
+.header-basket-number {
+  text-align: center;
+  position: absolute;
+  top: 45px;
+  right: 52px;
+  background-color: $color_ocean;
+  color: $color_sea-foam;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
 }
 
 .header-basket:hover {
