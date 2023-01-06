@@ -1,3 +1,6 @@
+import Sort from '../../services/Sort';
+import Service from '../../services/Services';
+
 let getProductList = async () => {
   const options = {
     method: 'GET',
@@ -13,8 +16,28 @@ let getProductList = async () => {
     console.log('Error getting documents', err);
   }
 };
-let getProduct = getProductList();
-let toggle = await false;
+const isProductLocalStorage = () => {
+  return localStorage.getItem('getProduct') ? true : false;
+};
+const getProductsFromStorage = async () => {
+  let products = await JSON.parse(localStorage.getItem('getProduct'));
+  return products;
+};
+
+let isGetProduct = async () => {
+  let getProduct = isProductLocalStorage() ? getProductsFromStorage() : getProductList();
+  return await getProduct;
+};
+const isToggleLocalStorage = () => {
+  return localStorage.getItem('toggle') ? true : false;
+};
+const getToggleFromStorage = () => {
+  let toggleStorage = JSON.parse(localStorage.getItem('toggle'));
+  let toggle = toggleStorage === false ? false : true;
+  return toggle;
+};
+let toggle = isToggleLocalStorage() ? getToggleFromStorage() : false;
+
 let Home = {
   // cards wrapper
 
@@ -34,10 +57,10 @@ let Home = {
     </div>`;
     return view;
   },
-  renderCardsFound: async () => {
+  renderCardsFound: async (product) => {
     let view = `
     <div class="cards-found">
-      Found: 0
+      Found: ${product.length}
     </div>`;
     return view;
   },
@@ -47,6 +70,16 @@ let Home = {
     return view;
   },
   renderCardsSwitch: async () => {
+    if (toggle === true) {
+      let view = `
+        <div class="cards-switch">
+          <label class="switch">
+              <input type="checkbox" name="switch" checked>
+              <span class="slider round"></span>
+          </label>
+        </div>`;
+      return view;
+    }
     let view = `
     <div class="cards-switch">
       <label class="switch">
@@ -60,7 +93,7 @@ let Home = {
     let view = `
       <div class="cards-menu">
         ${await Home.renderCardsSort()}
-        ${await Home.renderCardsFound()}
+        ${await Home.renderCardsFound(isGetProduct())}
         ${await Home.renderCardsSearch()}
         ${await Home.renderCardsSwitch()}
       </div>
@@ -69,9 +102,7 @@ let Home = {
   },
 
   // render Cards
-  renderCard: async (getProduct) => {
-    let product = await getProduct;
-
+  renderCard: async (product) => {
     if (product.length === 0) {
       return `<div class="not-found">
                 No products found
@@ -120,9 +151,10 @@ let Home = {
       .join('');
   },
   renderCards: async () => {
+    let product = await isGetProduct();
     let view = /*html*/ `
                 <div class="cards-table">
-                    ${await Home.renderCard(getProduct)}
+                    ${await Home.renderCard(product)}
                 </div>
         `;
     return view;
@@ -153,10 +185,6 @@ let Home = {
       </div>`;
     return view;
   },
-  // filter cards
-  renderUnique: async (arr, property) => {
-    return Array.from(new Set(await arr.map((item) => item[property])));
-  },
   renderedFilterItemBody: async (arg, name) => {
     return await arg
       .map((products) => {
@@ -168,11 +196,11 @@ let Home = {
       .join('');
   },
   getRenderedFilterCategoryBody: async (products) => {
-    const filterUnique = await Home.renderUnique(products, 'category');
+    const filterUnique = await Sort.unique(products, 'category');
     return await Home.renderedFilterItemBody(filterUnique, 'category');
   },
   getRenderedFilterBrandBody: async (products) => {
-    const filterUnique = await Home.renderUnique(products, 'brand');
+    const filterUnique = await Sort.unique(products, 'brand');
     return await Home.renderedFilterItemBody(filterUnique, 'brand');
   },
   // filter category
@@ -220,162 +248,120 @@ let Home = {
     return view;
   },
   after_render: async () => {
+    async function sort() {
+      let result = await getProductList();
+
+      const renderResult = await Sort.locationSort(result);
+
+      const cardsTable = document.querySelector('.cards-table');
+      const cardsFound = document.querySelector('.cards-found');
+
+      cardsTable.innerHTML = await Home.renderCards(renderResult);
+      cardsFound.innerHTML = await Home.renderCardsFound(renderResult);
+    }
+    window.addEventListener('hashchange', sort());
+    // reset
+    let reset = document.querySelector('.reset');
+    reset.addEventListener('click', () => {
+      localStorage.clear();
+    });
     // copy button
     let copy = document.querySelector('.copy');
     copy.addEventListener('click', () => {
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(window.location).then(
-          function () {
-            alert('Text copied to the clipboard');
-          },
-          function (e) {
-            alert('Error when copying: ' + e);
-          }
-        );
-      } else alert('Your browser does not support Clipboard');
+      Service.clipboard();
     });
 
-    // foundLength
-    const foundLength = document.querySelector('.cards-found');
+    // sort for queryParams
 
-    async function render(getProduct) {
-      let result = await getProduct;
-      return `Found ${await result.length}`;
-    }
-
-    foundLength.innerHTML = await render(getProduct);
-
-    const addQueryParam = (key, value) => {
-      const url = new URL(window.location.href);
-      if (String(value) === 'true' || String(value) === 'false' || value.length) {
-        url.searchParams.set(key, value);
-      } else {
-        url.searchParams.delete(key);
-      }
-      window.history.pushState({}, '', url.toString());
-    };
-
-    // sort by
-    async function sortBy(products, propertyForSort, direction) {
-      return await products.sort((productA, productB) => {
-        if (productA[propertyForSort] > productB[propertyForSort]) {
-          return direction === 'asc' ? 1 : -1;
-        } else if (productA[propertyForSort] < productB[propertyForSort]) {
-          return direction === 'desc' ? 1 : -1;
-        } else {
-          return 0;
-        }
-      });
-    }
-    // search
-    function searchTo(products, searchString) {
-      return products.filter((searchProduct) => {
-        return (
-          searchProduct.title.toLowerCase().includes(searchString) ||
-          searchProduct.description.toLowerCase().includes(searchString) ||
-          searchProduct.category.toLowerCase().includes(searchString) ||
-          searchProduct.rating.toString().includes(searchString) ||
-          searchProduct.price.toString().includes(searchString) ||
-          searchProduct.discountPercentage.toString().includes(searchString) ||
-          searchProduct.stock.toString().includes(searchString) ||
-          searchProduct.brand.toLowerCase().includes(searchString)
-        );
-      });
-    }
-    // sortTo
-    function sortTo(products, selectedCategories, selectedBrands) {
-      return products.filter((product) => {
-        return (
-          (selectedCategories.length === 0 || selectedCategories.includes(product.category)) &&
-          (selectedBrands.length === 0 || selectedBrands.includes(product.brand))
-        );
-      });
-    }
-
-    async function sort() {
-      let result = await getProduct;
-      // toggle = false;
-
-      const url = new URL(window.location.href);
-
-      for (const key of url.searchParams.keys()) {
-        if (key === 'sort') {
-          let keySort = url.searchParams.get(key).split(' ');
-          result = await sortBy(result, keySort[0], keySort[1]);
-        }
-
-        if (key.length === 0 || key === 'search') {
-          let keySort = url.searchParams.get(key);
-          result = await searchTo(result, keySort);
-        }
-
-        if (key.length === 0 || key === 'category' || key === 'brand') {
-          let keySortCategory = [];
-          let keySortBrand = [];
-          if (key === 'category') {
-            keySortCategory = url.searchParams.get(key).split(',');
-          }
-          if (key === 'brand') {
-            keySortBrand = url.searchParams.get(key).split(',');
-          }
-          result = await sortTo(result, keySortCategory, keySortBrand);
-        }
-
-        // if (key.length === 0 || key === 'switch') {
-        //   let keySort = url.searchParams.get(key);
-        // }
-      }
-
-      const cardRender = document.querySelector('.cards-table');
-      cardRender.innerHTML = await Home.renderCard(result);
-
-      foundLength.innerHTML = await render(result);
-    }
-
-    document.querySelector('.select-sort').addEventListener('input', async (event) => {
+    const select = document.querySelector('.select-sort');
+    select.addEventListener('input', async (event) => {
       let valueEvent = event.target.value;
-      addQueryParam('sort', valueEvent);
+      Service.isLocalStorage('sort', valueEvent);
       sort();
     });
 
-    document.querySelector('.cards-search').addEventListener('input', async (e) => {
+    let selects = document.querySelectorAll('.select-item');
+    let selected = (checkbox) => {
+      const valueCheckbox = checkbox.value;
+      const selectLocalStorage = JSON.parse(localStorage.getItem('sort'));
+      if (valueCheckbox === selectLocalStorage) {
+        checkbox.selected = true;
+      }
+    };
+    selects.forEach((checkbox) => selected(checkbox));
+
+    const search = document.querySelector('.cards-search');
+    search.addEventListener('input', async (e) => {
       let searchString = e.target.value.toLowerCase();
-      addQueryParam('search', searchString);
+      Service.isLocalStorage('search', searchString);
       sort();
     });
+    const searchLocalStorage = JSON.parse(localStorage.getItem('search'));
+    if (searchLocalStorage) {
+      search.value = searchLocalStorage;
+    }
 
     // sort by category and brand
+    let selectedCategories = [];
+    let selectedBrands = [];
+    const categoryLocalStorage = JSON.parse(localStorage.getItem('category'));
+    if (categoryLocalStorage) {
+      selectedCategories = categoryLocalStorage;
+    }
+    const brandLocalStorage = JSON.parse(localStorage.getItem('brand'));
+    if (brandLocalStorage) {
+      selectedBrands = brandLocalStorage;
+    }
+    let filteredProductsList = [];
 
     let checkboxesCategory = document.querySelectorAll('input[type=checkbox][name=category]');
     let checkboxesBrand = document.querySelectorAll('input[type=checkbox][name=brand]');
-    const selectedCategories = [];
-    const selectedBrands = [];
-    let filteredProductsList = [];
-
     const checked = (checkbox) => {
       checkbox.addEventListener('change', async function () {
-        const inputID = checkbox.getAttribute('id');
         const inputName = checkbox.getAttribute('name');
-
+        const inputID = checkbox.getAttribute('id');
+        console.log(checkbox.checked);
         filteredProductsList = inputName === 'category' ? selectedCategories : selectedBrands;
-
         if (filteredProductsList.includes(inputID)) {
           const element = filteredProductsList.indexOf(inputID);
           filteredProductsList.splice(element, 1);
         } else {
           filteredProductsList.push(inputID);
         }
-        addQueryParam('category', selectedCategories);
-        addQueryParam('brand', selectedBrands);
+        Service.isLocalStorage('category', selectedCategories);
+        Service.isLocalStorage('brand', selectedBrands);
         sort();
       });
     };
     checkboxesCategory.forEach((checkbox) => checked(checkbox));
     checkboxesBrand.forEach((checkbox) => checked(checkbox));
 
+    let checkedCategory = (checkbox) => {
+      const categoryLocalStorage = JSON.parse(localStorage.getItem('category'));
+      let checkedId = checkbox.id;
+      if (categoryLocalStorage) {
+        let element = categoryLocalStorage.includes(checkedId);
+        if (element) {
+          checkbox.checked = true;
+        }
+      }
+    };
+    let checkedBrand = (checkbox) => {
+      const brandLocalStorage = JSON.parse(localStorage.getItem('brand'));
+      let checkedId = checkbox.id;
+      if (brandLocalStorage) {
+        let element = brandLocalStorage.includes(checkedId);
+        if (element) {
+          checkbox.checked = true;
+        }
+      }
+    };
+    checkboxesCategory.forEach((checkbox) => checkedCategory(checkbox));
+    checkboxesBrand.forEach((checkbox) => checkedBrand(checkbox));
+
     document.querySelector('.cards-switch').addEventListener('change', async () => {
       toggle = toggle === false ? true : false;
-      addQueryParam('switch', toggle);
+      Service.isLocalStorage('toggle', toggle);
       sort();
     });
 
@@ -386,7 +372,7 @@ let Home = {
     const btns = document.querySelectorAll('.btn-add');
     btns.forEach((el, i) =>
       el.addEventListener('click', async () => {
-        let products = await getProduct;
+        let products = await isGetProduct();
         let id = products[i].id;
         let title = products[i].title;
         let description = products[i].description;
