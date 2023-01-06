@@ -1,6 +1,6 @@
 import Utils from '../../services/Utils';
 
-let getSingleProduct = async (id) => {
+const getSingleProduct = async (id: string | null) => {
   const options = {
     method: 'GET',
     headers: {
@@ -16,12 +16,12 @@ let getSingleProduct = async (id) => {
   }
 };
 
-let Detail = {
+const Detail = {
   render: async () => {
-    let request = Utils.parseRequestURL();
-    let post = await getSingleProduct(request.id);
+    const request = Utils.parseRequestURL();
+    const post = await getSingleProduct(request.id);
 
-    let view = /*html*/ `
+    const view = /*html*/ `
       <section class="section details-section">
         <div class="description-container">
               <div class="flex-container">
@@ -71,22 +71,22 @@ let Detail = {
     return view;
   },
   renderImages: async () => {
-    let request = Utils.parseRequestURL();
-    let post = await getSingleProduct(request.id);
-    let arr = post.images;
-    arr.forEach((el) => {
+    const request = Utils.parseRequestURL();
+    const post = await getSingleProduct(request.id);
+    const arr = post.images;
+    arr.forEach((el: string) => {
       const img = document.createElement('img');
       img.classList.add('secondary-image-description');
       img.src = el;
-      document.querySelector('.secondary-images-box').append(img);
+      (document.querySelector('.secondary-images-box') as HTMLElement).append(img);
     });
   },
 
   after_render: async () => {
     await Detail.renderImages();
-    let request = Utils.parseRequestURL();
-    let post = await getSingleProduct(request.id);
-    const addToCartBtn = document.querySelector('#add_to_cart');
+    const request = Utils.parseRequestURL();
+    const post = await getSingleProduct(request.id);
+    const addToCartBtn = document.querySelector('#add_to_cart') as HTMLButtonElement;
     addToCartBtn.addEventListener('click', () => {
       const id = post.id;
       const title = post.title;
@@ -97,17 +97,19 @@ let Detail = {
       const rating = post.rating;
       const stock = post.stock;
       const brand = post.brand;
-      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      let card = { id, title, price, image, description, discount, brand, rating, stock };
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const card = { id, title, price, image, description, discount, brand, rating, stock };
       localStorage.setItem('cart', JSON.stringify([...cart, card]));
     });
 
     const secondaryImages = document.querySelectorAll('.secondary-image-description');
-    const mainImage = document.querySelector('.main-image-description');
+    const mainImage = document.querySelector('.main-image-description') as HTMLImageElement;
 
     secondaryImages.forEach((el) =>
       el.addEventListener('click', (e) => {
-        mainImage.src = e.target.src;
+        if (e.target !== null) {
+          mainImage.src = (e.target as HTMLImageElement).src;
+        }
       })
     );
   },
