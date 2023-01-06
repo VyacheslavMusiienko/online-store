@@ -36,6 +36,9 @@ ol {
 }
 
 .btn {
+  display: inline-block;
+  padding: 9px 5px;
+  text-align: center;
   background-color: $color_ocean;
   color: $color_sea-foam;
   border: none;

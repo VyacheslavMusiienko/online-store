@@ -3,7 +3,7 @@
     z-index: 1;
     margin: 0px auto;
     text-align: center;
-    min-height: 75vh;
+    min-height: 45vh;
     width: 60%;
 }
 .modal-content {
@@ -13,6 +13,7 @@
     background-color: $color_deep-water;
     width: 80%;
     border-radius: 10px;
+    min-height: 65.2vh;
 }
 
 h2 {
@@ -24,14 +25,13 @@ h2 {
     font-size: 20px;
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 .personal_details h2,
 .credit_card_details h2 {
     font-size: 25px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .credit_card_details {
@@ -39,7 +39,6 @@ h2 {
     flex-direction: column;
     padding: 10px;
     font-size: 20px;
-    margin-bottom: 20px;
 }
 
 .input {

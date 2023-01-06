@@ -1,6 +1,6 @@
 .details-section{
   margin: 0 auto;
-  min-height: 75vh;
+  height: 65.8vh;
 }
 
 .description-container {
@@ -9,11 +9,10 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 7% auto;
+  margin: 5% auto;
   background-color: $color_deep-water;
   width: 90%;
   height: fit-content;
-  padding: 20px;
   border-radius: 30px;
 }
 
@@ -31,14 +30,14 @@
 }
 
 .description-item {
-  font-size: 20px;
+  font-size: 17px;
   color: $color_deep-water;
   background-color: $color_wave;
 }
 
 .container-image-descr {
-  width: 350px;
-  height: 250px;
+  width: 280px;
+  height: 200px;
   border-radius: 10px;
   padding: 5px;
   overflow: hidden;
@@ -47,12 +46,11 @@
 }
 
 .main-image-description {
-  max-width: 300px;
-  height: 100%;
+  max-width: 280px;
+  max-height: 200px;
   border-radius: 10px;
   margin-right: 50px;
   background-size: cover;
-  // background-position: center;
 
 }
 
@@ -79,16 +77,16 @@
 
 .block-summary {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-around;
   align-items: center;
   width: 100%;
-  padding: 10px;
-}
-
-.descr-btn {
   margin-top: 20px;
 }
+
+// .descr-btn {
+//   margin-top: 10px;
+// }
 
 .block-container {
   border-radius: 10px;
@@ -101,18 +99,21 @@
   flex-direction: column;
   justify-content: center;
   height: 70%;
-  padding: 10px;
-  margin: 20px;
+  padding: 5px;
+  margin: 10px;
   background-color: $color_wave;
   border-radius: 10px;
 }
 
 .info {
-  padding: 10px;
+  padding: 4px;
   color: $color_sea-foam;
   background-color: $color_ocean;
   margin-bottom: 5px;
   border-radius: 8px;
+  margin: 0 auto;
+  width: 70%;
+  overflow: hidden;
 }
 
 .flex-container {
@@ -123,7 +124,7 @@
 }
 
 .descr-btn {
-  width: 50%;
+  width: 40%;
   border-radius: 5px;
   border: none;
   cursor: pointer;

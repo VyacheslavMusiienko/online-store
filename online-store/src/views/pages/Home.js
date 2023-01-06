@@ -90,8 +90,8 @@ let Home = {
                                         <div class="card-rating">Rating: ${product.rating}</div>
                                         <div class="card-stock">Stock: ${product.stock}</div>
                                         <div class="btn-container">
-                                        <button class="btn btn-add">Add to cart</button>
-                                        <button class="btn"><a href="#/p/${product.id}" class="btn btn-details">Details</a></button>
+                                            <button class="btn btn-add">Add to cart</button>
+                                            <a href="#/p/${product.id}" class="btn btn-details">Details</a>
                                         </div>
                                     </div>
                                 </div>`
@@ -112,7 +112,7 @@ let Home = {
                                         <div class="card-stock">Stock: ${product.stock}</div>
                                         <div class="btn-container">
                                             <button class="btn btn-add">Add to cart</button>
-                                            <button class="btn"><a href="#/p/${product.id}" class="btn btn-details">Details</a></button>
+                                            <a href="#/p/${product.id}" class="btn btn-details">Details</a>
                                         </div>
                                     </div>
                                 </div>`
