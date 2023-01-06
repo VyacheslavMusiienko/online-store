@@ -1,6 +1,6 @@
-let Modal = {
+const Modal = {
   render: async () => {
-    let view = `
+    const view = `
     <div class="modal">
         <div class="modal-content">
             <div class="personal_details">
@@ -46,50 +46,53 @@ let Modal = {
     return view;
   },
   after_render: async () => {
-    const button = document.querySelector('.btn_confirm');
+    const button = document.querySelector('.btn_confirm') as HTMLButtonElement;
     //для правильного форматирования кредитной карты
 
-    const cardNum = document.getElementById('card-number');
-    const errorCard = document.querySelector('.error-card');
+    const cardNum = document.getElementById('card-number') as HTMLInputElement;
+    const errorCard = document.querySelector('.error-card') as HTMLInputElement;
 
-    cardNum.onkeyup = function () {
-      if (this.value == this.lastValue) return;
-      let caretPosition = this.selectionStart;
-      let sanitizedValue = this.value.replace(/[^0-9]/gi, '');
-      let parts = [];
+    if (cardNum !== null) {
+      cardNum.onkeyup = () => {
+        // if (cardNum.value == cardNum.lastValue) return;
+        let caretPosition = cardNum.selectionStart;
+        const sanitizedValue = cardNum.value.replace(/[^0-9]/gi, '');
+        const parts = [];
 
-      for (let i = 0, len = sanitizedValue.length; i < len; i += 4) {
-        parts.push(sanitizedValue.substring(i, i + 4));
-      }
-
-      for (let i = caretPosition - 1; i >= 0; i--) {
-        let c = this.value[i];
-        if (c < '0' || c > '9') {
-          caretPosition--;
+        for (let i = 0, len = sanitizedValue.length; i < len; i += 4) {
+          parts.push(sanitizedValue.substring(i, i + 4));
         }
-      }
-      caretPosition += Math.floor(caretPosition / 4);
+        if (caretPosition !== null) {
+          for (let i = caretPosition - 1; i >= 0; i--) {
+            const c = cardNum.value[i];
+            if (c < '0' || c > '9') {
+              caretPosition--;
+            }
+          }
+          caretPosition += Math.floor(caretPosition / 4);
 
-      this.value = this.lastValue = parts.join(' ');
-      this.selectionStart = this.selectionEnd = caretPosition;
-
-      function checkCard() {
-        if (cardNum.value.length === 19) {
-          cardNum.style.background = 'mediumaquamarine';
-          errorCard.style.display = 'none';
-        } else {
-          cardNum.style.background = 'salmon';
-          errorCard.innerHTML = 'Wrong card number !';
-          errorCard.style.display = 'block';
+          // cardNum.value = cardNum.lastValue = parts.join(' ');
+          cardNum.selectionStart = cardNum.selectionEnd = caretPosition;
         }
-      }
-      cardNum.addEventListener('input', checkCard);
-      button.addEventListener('click', checkCard);
-    };
+
+        function checkCard() {
+          if (cardNum.value.length === 19) {
+            cardNum.style.background = 'mediumaquamarine';
+            errorCard.style.display = 'none';
+          } else {
+            cardNum.style.background = 'salmon';
+            errorCard.innerHTML = 'Wrong card number !';
+            errorCard.style.display = 'block';
+          }
+        }
+        cardNum.addEventListener('input', checkCard);
+        button.addEventListener('click', checkCard);
+      };
+    }
 
     // блок ввода срока действия карты
-    const expInput = document.querySelector('.exp_date');
-    const errorDate = document.querySelector('.error-date');
+    const expInput = document.querySelector('.exp_date') as HTMLInputElement;
+    const errorDate = document.querySelector('.error-date') as HTMLElement;
 
     function validateExp() {
       if (expInput.value.length === 2) {
@@ -105,17 +108,17 @@ let Modal = {
       }
     }
 
-    function validate(value) {
+    function validate(value: string) {
       const currentYear = new Date().getFullYear().toString().slice(-2);
-      let [part1, part2] = value.split('/');
-      return value[2] === '/' && value.length === 5 && part1 <= 12 && part2 >= currentYear;
+      const [part1, part2] = value.split('/');
+      return value[2] === '/' && value.length === 5 && part1.length <= 12 && part2 >= currentYear;
     }
 
     expInput.addEventListener('input', validateExp);
     button.addEventListener('click', validateExp);
 
-    const inputCVV = document.querySelector('.input_cvv');
-    const errorCVV = document.querySelector('.error-cvv');
+    const inputCVV = document.querySelector('.input_cvv') as HTMLInputElement;
+    const errorCVV = document.querySelector('.error-cvv') as HTMLElement;
 
     const CVV_REGEXP = /\d{3,3}/;
 
@@ -130,7 +133,7 @@ let Modal = {
       }
     }
 
-    function valid(value) {
+    function valid(value: string) {
       return CVV_REGEXP.test(value);
     }
     inputCVV.addEventListener('input', validateCVV);
@@ -138,11 +141,11 @@ let Modal = {
 
     //валидация email инпута
     //из ТЗ - "E-mail". Валидация: проверяется, является ли введенный текст электронной почтой
-    const inputEmail = document.querySelector('.input_email');
-    const errorName = document.querySelector('.error-name');
-    const errorTel = document.querySelector('.error-telephone');
-    const errorAddress = document.querySelector('.error-address');
-    const errorEmail = document.querySelector('.error-email');
+    const inputEmail = document.querySelector('.input_email') as HTMLInputElement;
+    const errorName = document.querySelector('.error-name') as HTMLElement;
+    const errorTel = document.querySelector('.error-telephone') as HTMLElement;
+    const errorAddress = document.querySelector('.error-address') as HTMLElement;
+    const errorEmail = document.querySelector('.error-email') as HTMLElement;
 
     const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
@@ -160,13 +163,13 @@ let Modal = {
     inputEmail.addEventListener('input', onInput);
     button.addEventListener('click', onInput);
 
-    function isEmailValid(value) {
+    function isEmailValid(value: string) {
       return EMAIL_REGEXP.test(value);
     }
 
     //валидация name инпута
     //"Имя и Фамилия". Валидация: содержит не менее двух слов, длина каждого не менее 3 символов
-    const inputName = document.querySelector('.input_name');
+    const inputName = document.querySelector('.input_name') as HTMLInputElement;
 
     const handleInput = () => {
       inputName.style.background = '';
@@ -190,7 +193,7 @@ let Modal = {
       }
     };
 
-    function checkName(name) {
+    function checkName(name: string) {
       return name.split(' ').every((el) => el.length >= 3);
     }
 
@@ -200,7 +203,7 @@ let Modal = {
     //валидация phone инпута
     //"Номер телефона". Валидация: должно начинаться с '+', содержать только цифры и быть не короче 9 символов
 
-    const phoneInput = document.querySelector('.input_telephone');
+    const phoneInput = document.querySelector('.input_telephone') as HTMLInputElement;
     const regexPhone = /(\+)\d{9}/;
     phoneInput.addEventListener('input', onInputTel);
 
@@ -219,13 +222,13 @@ let Modal = {
 
     button.addEventListener('click', onInputTel);
 
-    function isTelValid(value) {
+    function isTelValid(value: string) {
       return regexPhone.test(value);
     }
 
     //валидация adress инпута
     //"Адрес доставки". Валидация: содержит не менее трех слов, длина каждого не менее 5 символов
-    const inputAddress = document.querySelector('.input_address');
+    const inputAddress = document.querySelector('.input_address') as HTMLInputElement;
 
     const handleAddress = () => {
       inputAddress.style.background = '';
@@ -248,7 +251,7 @@ let Modal = {
       }
     };
 
-    function checkAddress(name) {
+    function checkAddress(name: string) {
       return name.split(' ').every((el) => el.length >= 5);
     }
 
@@ -258,7 +261,7 @@ let Modal = {
     //логика перехода на главную страницу. После оформления заказа
     //Из ТЗ - > при успешном прохождении валидации всех полей и нажатии на кнопку, выводится сообщение, что заказ оформлен. Затем, спустя 3-5 секунд происходит редирект на главную страницу магазина. Корзина при этом очищается
 
-    const buttonOrder = document.querySelector('.btn_order');
+    const buttonOrder = document.querySelector('.btn_order') as HTMLButtonElement;
 
     function checkValid() {
       if (

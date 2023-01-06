@@ -6,7 +6,7 @@ import './assets/scss/modal.scss';
 
 import Home from './views/pages/Home.js';
 import Basket from './views/pages/Basket.js';
-import Modal from './views/pages/Modal.js';
+import Modal from './views/pages/Modal';
 import Error404 from './views/pages/Error404';
 import Detail from './views/pages/Detail.js';
 
