@@ -1,4 +1,4 @@
-import { IUtils } from '../interface';
+import { IUtils } from '../interface/Utils';
 
 const Utils = {
   parseRequestURL: (): IUtils => {
@@ -14,10 +14,6 @@ const Utils = {
     request.verb = r[3];
 
     return request;
-  },
-
-  sleep: (ms: number): Promise<number> => {
-    return new Promise((resolve) => window.setTimeout(resolve, ms));
   },
 };
 
