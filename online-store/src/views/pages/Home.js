@@ -281,14 +281,14 @@ let Home = {
     });
 
     let selects = document.querySelectorAll('.select-item');
-    let selected = (checkbox) => {
+    let selectedLocalStorage = (checkbox) => {
       const valueCheckbox = checkbox.value;
       const selectLocalStorage = JSON.parse(localStorage.getItem('sort'));
       if (valueCheckbox === selectLocalStorage) {
         checkbox.selected = true;
       }
     };
-    selects.forEach((checkbox) => selected(checkbox));
+    selects.forEach((checkbox) => selectedLocalStorage(checkbox));
 
     const search = document.querySelector('.cards-search');
     search.addEventListener('input', async (e) => {
@@ -375,15 +375,15 @@ let Home = {
     // console.log([...new Set(selected)])
     let cardsContainer = document.querySelectorAll('.card-container');
     cardsContainer.forEach((el, i) => {
-      el.style.backgroundColor = selected[i] ? "mediumseagreen" : "";
-    })
+      el.style.backgroundColor = selected[i] ? 'mediumseagreen' : '';
+    });
     totalMoney.innerHTML = total;
 
     const btns = document.querySelectorAll('.btn-add');
     btns.forEach((el, i) =>
       el.addEventListener('click', async (e) => {
-        e.target.innerHTML = e.target.innerHTML === "Add to cart" ? "Drop from cart" : "Add to cart";
-        let products = await getProduct;
+        e.target.innerHTML = e.target.innerHTML === 'Add to cart' ? 'Drop from cart' : 'Add to cart';
+        let products = await getProductList();
         let id = products[i].id;
         let title = products[i].title;
         let description = products[i].description;
@@ -396,33 +396,33 @@ let Home = {
         let cart = JSON.parse(localStorage.getItem('cart') || '[]');
         let card = { id, title, price, image, description, discount, brand, rating, stock };
         let total = document.querySelector('.cart-total-inner');
-        let expression = cart.some((el) => el.id === card.id)
-        if (expression && e.target.innerHTML === "Drop from cart"){
+        let expression = cart.some((el) => el.id === card.id);
+        if (expression && e.target.innerHTML === 'Drop from cart') {
           total.innerHTML = +total.innerHTML + +products[i].price;
           let result = total.innerHTML;
           localStorage.setItem('total', JSON.stringify(result));
-          cardsContainer[id - 1].style.backgroundColor = "";
+          cardsContainer[id - 1].style.backgroundColor = '';
           return;
         }
-        if(e.target.innerHTML === "Add to cart") {
+        if (e.target.innerHTML === 'Add to cart') {
           total.innerHTML = +total.innerHTML - +products[i].price;
           let result = total.innerHTML;
           localStorage.setItem('total', JSON.stringify(result));
-          let z = cart.filter(el => el.id !== card.id)
+          let z = cart.filter((el) => el.id !== card.id);
           localStorage.setItem('cart', JSON.stringify(z));
-          cardsContainer[id - 1].style.backgroundColor = "";
-          selected = selected.filter(el => el === card.id - 1);
+          cardsContainer[id - 1].style.backgroundColor = '';
+          selected = selected.filter((el) => el === card.id - 1);
           localStorage.setItem('selectedItems', JSON.stringify([...new Set(selected)]));
           basketProductsCounter.innerHTML = +basketProductsCounter.innerHTML - 1;
         }
-        if(e.target.innerHTML === "Drop from cart") {
+        if (e.target.innerHTML === 'Drop from cart') {
           total.innerHTML = +total.innerHTML + +products[i].price;
           let result = total.innerHTML;
-          selected.push(card.id)
-          localStorage.setItem('selectedItems', JSON.stringify([...new Set(selected)]))
+          selected.push(card.id);
+          localStorage.setItem('selectedItems', JSON.stringify([...new Set(selected)]));
           localStorage.setItem('total', JSON.stringify(result));
           localStorage.setItem('cart', JSON.stringify([...cart, card]));
-          cardsContainer[id - 1].style.backgroundColor = "mediumseagreen";
+          cardsContainer[id - 1].style.backgroundColor = 'mediumseagreen';
           basketProductsCounter.innerHTML = +basketProductsCounter.innerHTML + 1;
         }
       })
