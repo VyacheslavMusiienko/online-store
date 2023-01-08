@@ -1,4 +1,5 @@
 import Utils from '../../services/Utils';
+import { OptionType, PromiseStringType, PromiseVoidType } from '../../types';
 
 const getSingleProduct = async (id: string | null) => {
   const options = {
@@ -16,8 +17,8 @@ const getSingleProduct = async (id: string | null) => {
   }
 };
 
-const Detail = {
-  render: async () => {
+const Detail: OptionType = {
+  render: async (): PromiseStringType => {
     const request = Utils.parseRequestURL();
     const post = await getSingleProduct(request.id);
 
@@ -70,7 +71,7 @@ const Detail = {
       </section>`;
     return view;
   },
-  renderImages: async () => {
+  renderImages: async (): PromiseVoidType => {
     const request = Utils.parseRequestURL();
     const post = await getSingleProduct(request.id);
     const arr = post.images;
@@ -82,7 +83,7 @@ const Detail = {
     });
   },
 
-  after_render: async () => {
+  after_render: async (): PromiseVoidType => {
     await Detail.renderImages();
     const request = Utils.parseRequestURL();
     const post = await getSingleProduct(request.id);

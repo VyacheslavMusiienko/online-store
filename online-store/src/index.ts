@@ -23,25 +23,32 @@ const routes = {
 };
 
 const router = async () => {
-  const header = null || document.getElementById('header_container');
-  const content = null || document.getElementById('page_container');
-  const footer = null || document.getElementById('footer_container');
+  const header = document.getElementById('header_container') as HTMLElement;
+  const content = document.getElementById('page_container') as HTMLElement;
+  const footer = document.getElementById('footer_container') as HTMLElement;
 
-  header.innerHTML = await Header.render();
+  if (header !== null) {
+    header.innerHTML = `${await Header.render()}`;
+  }
+  if (footer !== null) {
+    footer.innerHTML = `${await Footer.render()}`;
+  }
   // await Header.after_render();
-  footer.innerHTML = await Footer.render();
   // await Footer.after_render();
 
-  let request = Utils.parseRequestURL();
+  const request = Utils.parseRequestURL();
 
-  let parsedURL =
+  const parsedURL =
     (request.resource ? '/' + request.resource : '/') +
     (request.id ? '/:id' : '') +
     (request.verb ? '/' + request.verb : '');
 
-  let page = routes[parsedURL] ? routes[parsedURL] : Error404;
-  content.innerHTML = await page.render();
-  await page.after_render();
+  const page = routes[parsedURL] ? routes[parsedURL] : Error404;
+
+  if (content !== null) {
+    content.innerHTML = `${await page.render()}`;
+    await page.after_render();
+  }
 };
 
 window.addEventListener('hashchange', router);

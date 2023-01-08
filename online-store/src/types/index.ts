@@ -1,2 +1,4 @@
 type OptionType = { [key: string]: () => Promise<void | string> };
-export { OptionType };
+type PromiseStringType = Promise<string>;
+type PromiseVoidType = Promise<void>;
+export { OptionType, PromiseStringType, PromiseVoidType };

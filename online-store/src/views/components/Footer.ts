@@ -1,7 +1,7 @@
-import { OptionType } from '../../types';
+import { OptionType, PromiseStringType } from '../../types';
 
 const Footer: OptionType = {
-  render: async () => {
+  render: async (): PromiseStringType => {
     const view = /*html*/ `
         <footer class="footer">
           <a class="link images" href="https://rs.school/js/">

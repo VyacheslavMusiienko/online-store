@@ -1,7 +1,8 @@
 import Sort from '../../services/Sort';
 import Service from '../../services/Services';
+import { IProduct } from '../../interface/Product';
 
-let getProductList = async () => {
+const getProductList = async () => {
   const options = {
     method: 'GET',
     headers: {
@@ -20,30 +21,36 @@ const isProductLocalStorage = () => {
   return localStorage.getItem('getProduct') ? true : false;
 };
 const getProductsFromStorage = async () => {
-  let products = await JSON.parse(localStorage.getItem('getProduct'));
-  return products;
+  const storageProducts = localStorage.getItem('getProduct');
+  if (storageProducts !== null) {
+    const products = await JSON.parse(storageProducts);
+    return products;
+  }
 };
 
-let isGetProduct = async () => {
-  let getProduct = isProductLocalStorage() ? getProductsFromStorage() : getProductList();
+const isGetProduct = async () => {
+  const getProduct = isProductLocalStorage() ? getProductsFromStorage() : getProductList();
   return await getProduct;
 };
 const isToggleLocalStorage = () => {
   return localStorage.getItem('toggle') ? true : false;
 };
 const getToggleFromStorage = () => {
-  let toggleStorage = JSON.parse(localStorage.getItem('toggle'));
-  let toggle = toggleStorage === false ? false : true;
-  return toggle;
+  const storageToggle = localStorage.getItem('toggle');
+  if (storageToggle !== null) {
+    const toggleStorage = JSON.parse(storageToggle);
+    const toggle = toggleStorage === false ? false : true;
+    return toggle;
+  }
 };
 let toggle = isToggleLocalStorage() ? getToggleFromStorage() : false;
 
-let Home = {
+const Home = {
   // cards wrapper
 
   // cards menu
   renderCardsSort: async () => {
-    let view = `
+    const view = `
     <div class="cards-sort">
       <select class="select-sort">
           <option class="select-item" value="">Sort option:</option>
@@ -57,21 +64,21 @@ let Home = {
     </div>`;
     return view;
   },
-  renderCardsFound: async (product) => {
-    let view = `
+  renderCardsFound: async (product: IProduct[]) => {
+    const view = `
     <div class="cards-found">
       Found: ${product.length}
     </div>`;
     return view;
   },
   renderCardsSearch: async () => {
-    let view = `
+    const view = `
     <input type="search" class="cards-search" placeholder="Search" />`;
     return view;
   },
   renderCardsSwitch: async () => {
     if (toggle === true) {
-      let view = `
+      const view = `
         <div class="cards-switch">
           <label class="switch">
               <input type="checkbox" name="switch" checked>
@@ -80,7 +87,7 @@ let Home = {
         </div>`;
       return view;
     }
-    let view = `
+    const view = `
     <div class="cards-switch">
       <label class="switch">
           <input type="checkbox" name="switch">
@@ -90,10 +97,10 @@ let Home = {
     return view;
   },
   renderCardsMenu: async () => {
-    let view = `
+    const view = `
       <div class="cards-menu">
         ${await Home.renderCardsSort()}
-        ${await Home.renderCardsFound(isGetProduct())}
+        ${await Home.renderCardsFound(await isGetProduct())}
         ${await Home.renderCardsSearch()}
         ${await Home.renderCardsSwitch()}
       </div>
@@ -102,7 +109,7 @@ let Home = {
   },
 
   // render Cards
-  renderCard: async (product) => {
+  renderCard: async (product: IProduct[]) => {
     if (product.length === 0) {
       return `<div class="not-found">
                 No products found
@@ -121,7 +128,7 @@ let Home = {
                                         <div class="card-rating">Rating: ${product.rating}</div>
                                         <div class="card-stock">Stock: ${product.stock}</div>
                                         <div class="btn-container">
-                                            <button class="btn btn-add">Add to cart</button>
+                                            <button class="btn btn-add" data-id='${product.id}'>Add to cart</button>
                                             <a href="#/p/${product.id}" class="btn btn-details">Details</a>
                                         </div>
                                     </div>
@@ -142,7 +149,7 @@ let Home = {
                                         <div class="card-rating">Rating: ${product.rating}</div>
                                         <div class="card-stock">Stock: ${product.stock}</div>
                                         <div class="btn-container">
-                                            <button class="btn btn-add">Add to cart</button>
+                                            <button class="btn btn-add" data-id='${product.id}'>Add to cart</button>
                                             <a href="#/p/${product.id}" class="btn btn-details">Details</a>
                                         </div>
                                     </div>
@@ -151,8 +158,8 @@ let Home = {
       .join('');
   },
   renderCards: async () => {
-    let product = await isGetProduct();
-    let view = /*html*/ `
+    const product = await isGetProduct();
+    const view = /*html*/ `
                 <div class="cards-table">
                     ${await Home.renderCard(product)}
                 </div>
@@ -160,7 +167,7 @@ let Home = {
     return view;
   },
   renderWrapperCards: async () => {
-    let view = `
+    const view = `
     <div class="wrapper cards">
       ${await Home.renderCardsMenu()}
       ${await Home.renderCards()}
@@ -171,21 +178,21 @@ let Home = {
   // filter wrapper
 
   // button filter
-  renderFilterButton: async (param, input) => {
-    let view = `
+  renderFilterButton: async (param: string, input: string) => {
+    const view = `
       <button class="btn ${param}">${input}</button>
     `;
     return view;
   },
   renderFilterButtons: async () => {
-    let view = `
+    const view = `
       <div class="button-filter">
         ${await Home.renderFilterButton('reset', 'Reset')}
         ${await Home.renderFilterButton('copy', 'Copy')}
       </div>`;
     return view;
   },
-  renderedFilterItemBody: async (arg, name) => {
+  renderedFilterItemBody: async (arg: IProduct[], name: string) => {
     return await arg
       .map((products) => {
         return `<div class = "filter-item">
@@ -195,18 +202,18 @@ let Home = {
       })
       .join('');
   },
-  getRenderedFilterCategoryBody: async (products) => {
+  getRenderedFilterCategoryBody: async (products: IProduct[]) => {
     const filterUnique = await Sort.unique(products, 'category');
     return await Home.renderedFilterItemBody(filterUnique, 'category');
   },
-  getRenderedFilterBrandBody: async (products) => {
+  getRenderedFilterBrandBody: async (products: IProduct[]) => {
     const filterUnique = await Sort.unique(products, 'brand');
     return await Home.renderedFilterItemBody(filterUnique, 'brand');
   },
   // filter category
   renderFilterCategory: async () => {
-    let categories = await getProductList();
-    let view = `
+    const categories = await getProductList();
+    const view = `
     <div class="filter-block category-block">
       <div class="filter-title category-title">Category</div>
         <div class="filter-body category-body">
@@ -218,8 +225,8 @@ let Home = {
 
   // filter brand
   renderFilterBrand: async () => {
-    let brands = await getProductList();
-    let view = `
+    const brands = await getProductList();
+    const view = `
     <div class="filter-block brand-block">
       <div class="filter-title brand-title">Brand</div>
         <div class="filter-body brand-body">
@@ -229,7 +236,7 @@ let Home = {
     return view;
   },
   renderWrapperFilter: async () => {
-    let view = `
+    const view = `
     <div class="wrapper filter">
       ${await Home.renderFilterButtons()}
       ${await Home.renderFilterCategory()}
@@ -239,7 +246,7 @@ let Home = {
     return view;
   },
   render: async () => {
-    let view = /*html*/ `
+    const view = /*html*/ `
             <main class="main d-flex">
               ${await Home.renderWrapperFilter()}
               ${await Home.renderWrapperCards()}
@@ -249,184 +256,195 @@ let Home = {
   },
   after_render: async () => {
     async function sort() {
-      let result = await getProductList();
+      const result = await getProductList();
 
       const renderResult = await Sort.locationSort(result);
 
-      const cardsTable = document.querySelector('.cards-table');
-      const cardsFound = document.querySelector('.cards-found');
+      const cardsTable = document.querySelector('.cards-table') as HTMLElement;
+      const cardsFound = document.querySelector('.cards-found') as HTMLElement;
 
-      cardsTable.innerHTML = await Home.renderCards(renderResult);
+      cardsTable.innerHTML = await Home.renderCards();
       cardsFound.innerHTML = await Home.renderCardsFound(renderResult);
     }
-    window.addEventListener('hashchange', sort());
+    // window.addEventListener('hashchange', sort());
     // reset
-    let reset = document.querySelector('.reset');
+    const reset = document.querySelector('.reset') as HTMLButtonElement;
     reset.addEventListener('click', () => {
       localStorage.clear();
     });
     // copy button
-    let copy = document.querySelector('.copy');
+    const copy = document.querySelector('.copy') as HTMLButtonElement;
     copy.addEventListener('click', () => {
       Service.clipboard();
     });
 
     // sort for queryParams
 
-    const select = document.querySelector('.select-sort');
-    select.addEventListener('input', async (event) => {
-      let valueEvent = event.target.value;
+    const select = document.querySelector('.select-sort') as HTMLSelectElement;
+    select.addEventListener('input', (event) => {
+      const valueEvent = (<HTMLInputElement>event.target).value;
       Service.isLocalStorage('sort', valueEvent);
       sort();
     });
 
-    let selects = document.querySelectorAll('.select-item');
-    let selectedLocalStorage = (checkbox) => {
-      const valueCheckbox = checkbox.value;
-      const selectLocalStorage = JSON.parse(localStorage.getItem('sort'));
-      if (valueCheckbox === selectLocalStorage) {
-        checkbox.selected = true;
+    const selects = document.querySelectorAll<HTMLElement>('.select-item');
+    const selectedLocalStorage = (checkbox: HTMLElement) => {
+      const valueCheckbox = (<HTMLSelectElement>checkbox).value;
+      const storageSort = localStorage.getItem('sort');
+      if (storageSort !== null) {
+        const selectLocalStorage = JSON.parse(storageSort);
+        if (valueCheckbox === selectLocalStorage) {
+          (<HTMLOptionElement>checkbox).selected = true;
+        }
       }
     };
     selects.forEach((checkbox) => selectedLocalStorage(checkbox));
 
-    const search = document.querySelector('.cards-search');
-    search.addEventListener('input', async (e) => {
-      let searchString = e.target.value.toLowerCase();
+    const search = document.querySelector('.cards-search') as HTMLInputElement;
+    search.addEventListener('input', (e) => {
+      const searchString = (<HTMLInputElement>e.target).value.toLowerCase();
       Service.isLocalStorage('search', searchString);
       sort();
     });
-    const searchLocalStorage = JSON.parse(localStorage.getItem('search'));
-    if (searchLocalStorage) {
-      search.value = searchLocalStorage;
+    const storageSearch = localStorage.getItem('search');
+    if (storageSearch !== null) {
+      const searchLocalStorage = JSON.parse(storageSearch);
+      if (searchLocalStorage) {
+        search.value = searchLocalStorage;
+      }
     }
 
     // sort by category and brand
-    let selectedCategories = [];
-    let selectedBrands = [];
-    const categoryLocalStorage = JSON.parse(localStorage.getItem('category'));
-    if (categoryLocalStorage) {
-      selectedCategories = categoryLocalStorage;
+    let selectedCategories: Array<string> = [];
+    let selectedBrands: Array<string> = [];
+    const storageCategory = localStorage.getItem('category');
+    if (storageCategory !== null) {
+      const categoryLocalStorage = JSON.parse(storageCategory);
+      if (categoryLocalStorage) {
+        selectedCategories = categoryLocalStorage;
+      }
     }
-    const brandLocalStorage = JSON.parse(localStorage.getItem('brand'));
-    if (brandLocalStorage) {
-      selectedBrands = brandLocalStorage;
+    const storageBrand = localStorage.getItem('brand');
+    if (storageBrand) {
+      const brandLocalStorage = JSON.parse(storageBrand);
+      if (brandLocalStorage) {
+        selectedBrands = brandLocalStorage;
+      }
     }
-    let filteredProductsList = [];
 
-    let checkboxesCategory = document.querySelectorAll('input[type=checkbox][name=category]');
-    let checkboxesBrand = document.querySelectorAll('input[type=checkbox][name=brand]');
-    const checked = (checkbox) => {
-      checkbox.addEventListener('change', async function () {
+    let filteredProductsList: Array<string> = [];
+
+    const checkboxesCategory = document.querySelectorAll<HTMLElement>('input[type=checkbox][name=category]');
+    const checkboxesBrand = document.querySelectorAll<HTMLElement>('input[type=checkbox][name=brand]');
+    const checked = (checkbox: HTMLElement) => {
+      checkbox.addEventListener('change', function () {
         const inputName = checkbox.getAttribute('name');
         const inputID = checkbox.getAttribute('id');
-        console.log(checkbox.checked);
         filteredProductsList = inputName === 'category' ? selectedCategories : selectedBrands;
-        if (filteredProductsList.includes(inputID)) {
-          const element = filteredProductsList.indexOf(inputID);
-          filteredProductsList.splice(element, 1);
-        } else {
-          filteredProductsList.push(inputID);
+        if (inputID !== null) {
+          if (filteredProductsList.includes(inputID)) {
+            const element = filteredProductsList.indexOf(inputID);
+            filteredProductsList.splice(element, 1);
+          } else {
+            filteredProductsList.push(inputID);
+          }
+          Service.isLocalStorage('category', `${selectedCategories}`);
+          Service.isLocalStorage('brand', `${selectedBrands}`);
+          sort();
         }
-        Service.isLocalStorage('category', selectedCategories);
-        Service.isLocalStorage('brand', selectedBrands);
-        sort();
       });
     };
     checkboxesCategory.forEach((checkbox) => checked(checkbox));
     checkboxesBrand.forEach((checkbox) => checked(checkbox));
 
-    let checkedCategory = (checkbox) => {
-      const categoryLocalStorage = JSON.parse(localStorage.getItem('category'));
-      let checkedId = checkbox.id;
-      if (categoryLocalStorage) {
-        let element = categoryLocalStorage.includes(checkedId);
-        if (element) {
-          checkbox.checked = true;
+    const checkedCategory = (checkbox: HTMLElement) => {
+      const storageCategory = localStorage.getItem('category');
+      if (storageCategory !== null) {
+        const categoryLocalStorage = JSON.parse(storageCategory);
+        const checkedId = checkbox.id;
+        if (categoryLocalStorage) {
+          const element = categoryLocalStorage.includes(checkedId);
+          if (element) {
+            (<HTMLInputElement>checkbox).checked = true;
+          }
         }
       }
     };
-    let checkedBrand = (checkbox) => {
-      const brandLocalStorage = JSON.parse(localStorage.getItem('brand'));
-      let checkedId = checkbox.id;
-      if (brandLocalStorage) {
-        let element = brandLocalStorage.includes(checkedId);
-        if (element) {
-          checkbox.checked = true;
+    const checkedBrand = (checkbox: HTMLElement) => {
+      const storageBrand = localStorage.getItem('brand');
+      if (storageBrand !== null) {
+        const brandLocalStorage = JSON.parse(storageBrand);
+        const checkedId = checkbox.id;
+        if (brandLocalStorage) {
+          const element = brandLocalStorage.includes(checkedId);
+          if (element) {
+            (<HTMLInputElement>checkbox).checked = true;
+          }
         }
       }
     };
     checkboxesCategory.forEach((checkbox) => checkedCategory(checkbox));
     checkboxesBrand.forEach((checkbox) => checkedBrand(checkbox));
 
-    document.querySelector('.cards-switch').addEventListener('change', async () => {
+    (document.querySelector('.cards-switch') as HTMLElement).addEventListener('change', async () => {
       toggle = toggle === false ? true : false;
-      Service.isLocalStorage('toggle', toggle);
+      Service.isLocalStorage('toggle', `${toggle}`);
       sort();
     });
 
-    const totalMoney = document.querySelector('.cart-total-inner');
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const basketProductsCounter = document.querySelector('.header-basket-number');
+    const totalMoney = document.querySelector('.cart-total-inner') as HTMLElement;
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const basketProductsCounter = document.querySelector('.header-basket-number') as HTMLElement;
     basketProductsCounter.innerHTML = cart.length;
-    let total = JSON.parse(localStorage.getItem('total') || '0');
+    const total = JSON.parse(localStorage.getItem('total') || '0');
     let selected = JSON.parse(localStorage.getItem('selectedItems') || '[]');
     selected = [...new Set(selected)];
     // console.log([...new Set(selected)])
-    let cardsContainer = document.querySelectorAll('.card-container');
+    const cardsContainer = document.querySelectorAll('.card-container');
     cardsContainer.forEach((el, i) => {
-      el.style.backgroundColor = selected[i] ? 'mediumseagreen' : '';
+      (<HTMLElement>el).style.backgroundColor = selected[i] ? 'mediumseagreen' : '';
     });
-    totalMoney.innerHTML = total;
+    totalMoney.innerHTML = `${total}`;
 
-    const btns = document.querySelectorAll('.btn-add');
-    btns.forEach((el, i) =>
-      el.addEventListener('click', async (e) => {
-        e.target.innerHTML = e.target.innerHTML === 'Add to cart' ? 'Drop from cart' : 'Add to cart';
-        let products = await getProductList();
-        let id = products[i].id;
-        let title = products[i].title;
-        let description = products[i].description;
-        let price = products[i].price;
-        let image = products[i].images[0];
-        let discount = products[i].discountPercentage;
-        let rating = products[i].rating;
-        let brand = products[i].brand;
-        let stock = products[i].stock;
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        let card = { id, title, price, image, description, discount, brand, rating, stock };
-        let total = document.querySelector('.cart-total-inner');
-        let expression = cart.some((el) => el.id === card.id);
-        if (expression && e.target.innerHTML === 'Drop from cart') {
-          total.innerHTML = +total.innerHTML + +products[i].price;
-          let result = total.innerHTML;
-          localStorage.setItem('total', JSON.stringify(result));
-          cardsContainer[id - 1].style.backgroundColor = '';
-          return;
+    const buttonAdd = document.querySelector('.cards-table') as HTMLElement;
+    buttonAdd.addEventListener('click', async (e) => {
+      const classNameTarget = (<HTMLElement>e.target).className;
+      const dataAttrTarget = (<HTMLElement>e.target).getAttribute('data-id');
+      const products = await isGetProduct();
+
+      if (dataAttrTarget !== null) {
+        if (classNameTarget === 'btn btn-add') {
+          (<HTMLElement>e.target).innerHTML =
+            (<HTMLElement>e.target).innerHTML === 'Add to cart' ? 'Drop from cart' : 'Add to cart';
+          const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+          const card = products.find((item: HTMLElement) => {
+            // console.log(item.id);
+            // console.log(dataAttrTarget);
+            return +item.id === +dataAttrTarget;
+          });
+          const total = document.querySelector('.cart-total-inner') as HTMLElement;
+          if ((<HTMLElement>e.target).innerHTML === 'Drop from cart') {
+            total.innerHTML = `${+total.innerHTML + card.price}`;
+            const result = total.innerHTML;
+            selected.push(card.id);
+            localStorage.setItem('selectedItems', JSON.stringify([...new Set(selected)]));
+            localStorage.setItem('total', JSON.stringify(result));
+            localStorage.setItem('cart', JSON.stringify([...cart, card]));
+            basketProductsCounter.innerHTML = `${+basketProductsCounter.innerHTML + 1}`;
+          }
+          if ((<HTMLElement>e.target).innerHTML === 'Add to cart') {
+            total.innerHTML = `${+total.innerHTML - +card.price}`;
+            const result = total.innerHTML;
+            localStorage.setItem('total', JSON.stringify(result));
+            const z = cart.filter((el: HTMLElement) => el.id !== card.id);
+            localStorage.setItem('cart', JSON.stringify(z));
+            selected = selected.filter((el: string) => +el === card.id - 1);
+            localStorage.setItem('selectedItems', JSON.stringify([...new Set(selected)]));
+            basketProductsCounter.innerHTML = `${+basketProductsCounter.innerHTML - 1}`;
+          }
         }
-        if (e.target.innerHTML === 'Add to cart') {
-          total.innerHTML = +total.innerHTML - +products[i].price;
-          let result = total.innerHTML;
-          localStorage.setItem('total', JSON.stringify(result));
-          let z = cart.filter((el) => el.id !== card.id);
-          localStorage.setItem('cart', JSON.stringify(z));
-          cardsContainer[id - 1].style.backgroundColor = '';
-          selected = selected.filter((el) => el === card.id - 1);
-          localStorage.setItem('selectedItems', JSON.stringify([...new Set(selected)]));
-          basketProductsCounter.innerHTML = +basketProductsCounter.innerHTML - 1;
-        }
-        if (e.target.innerHTML === 'Drop from cart') {
-          total.innerHTML = +total.innerHTML + +products[i].price;
-          let result = total.innerHTML;
-          selected.push(card.id);
-          localStorage.setItem('selectedItems', JSON.stringify([...new Set(selected)]));
-          localStorage.setItem('total', JSON.stringify(result));
-          localStorage.setItem('cart', JSON.stringify([...cart, card]));
-          cardsContainer[id - 1].style.backgroundColor = 'mediumseagreen';
-          basketProductsCounter.innerHTML = +basketProductsCounter.innerHTML + 1;
-        }
-      })
-    );
+      }
+    });
   },
 };
 
