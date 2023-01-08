@@ -1,7 +1,7 @@
-import { OptionType } from '../../types';
+import { OptionType, PromiseStringType, PromiseVoidType } from '../../types';
 
 const Header: OptionType = {
-  render: async () => {
+  render: async (): PromiseStringType => {
     const view = /*html*/ `
               <header class="header">
                 <div class="container">
@@ -21,7 +21,7 @@ const Header: OptionType = {
         `;
     return view;
   },
-  after_render: async () => {
+  after_render: async (): PromiseVoidType => {
     const total = document.querySelector('.cart-total-inner') as HTMLElement;
     const totalStorage = JSON.parse(localStorage.getItem('total') || '0');
     total.innerHTML = totalStorage;

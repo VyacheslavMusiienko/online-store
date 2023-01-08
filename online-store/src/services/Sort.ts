@@ -1,10 +1,14 @@
 import { IProduct } from '../interface/Product';
 const Sort = {
-  unique: async (arr: IProduct[], property: string) => {
-    return Array.from(new Set(await arr.map((item) => item[property as keyof IProduct])));
+  unique: (arr: IProduct[], property: string) => {
+    const newArray = arr.map((item) => item[property as keyof IProduct]);
+    const set1 = new Set(newArray);
+    const array = [...set1];
+    // const result = Array.from(new Set(arr.map((item) => item[property as keyof IProduct])));
+    return array;
   },
-  sortBySelector: async (products: IProduct[], propertyForSort: string, direction: string): Promise<IProduct[]> => {
-    return await products.sort((productA: IProduct, productB: IProduct) => {
+  sortBySelector: (products: IProduct[], propertyForSort: string, direction: string): IProduct[] => {
+    return products.sort((productA: IProduct, productB: IProduct) => {
       if (productA[propertyForSort as keyof IProduct] > productB[propertyForSort as keyof IProduct]) {
         return direction === 'asc' ? 1 : -1;
       } else if (productA[propertyForSort as keyof IProduct] < productB[propertyForSort as keyof IProduct]) {
@@ -14,7 +18,7 @@ const Sort = {
       }
     });
   },
-  searchTo: async (products: IProduct[], searchString: string): Promise<IProduct[]> => {
+  searchTo: (products: IProduct[], searchString: string): IProduct[] => {
     return products.filter((searchProduct: IProduct) => {
       return (
         searchProduct.title.toLowerCase().includes(searchString) ||
@@ -28,11 +32,7 @@ const Sort = {
       );
     });
   },
-  sortByBlock: async (
-    products: IProduct[],
-    selectedCategories: Array<string>,
-    selectedBrands: Array<string>
-  ): Promise<IProduct[]> => {
+  sortByBlock: (products: IProduct[], selectedCategories: Array<string>, selectedBrands: Array<string>): IProduct[] => {
     return products.filter((product: IProduct) => {
       return (
         (selectedCategories.length === 0 || selectedCategories.includes(product.category)) &&
@@ -40,7 +40,7 @@ const Sort = {
       );
     });
   },
-  locationSort: async (result: IProduct[]): Promise<IProduct[]> => {
+  locationSort: (result: IProduct[]): IProduct[] => {
     const url = new URL(window.location.href);
 
     for (const key of url.searchParams.keys()) {
@@ -50,7 +50,7 @@ const Sort = {
           const newKeySort = keySort.split(' ');
           const propertyForSort = newKeySort[0];
           const direction = newKeySort[1];
-          result = await Sort.sortBySelector(result, propertyForSort, direction);
+          result = Sort.sortBySelector(result, propertyForSort, direction);
           localStorage.setItem(key, JSON.stringify(keySort));
         }
       }
@@ -58,7 +58,7 @@ const Sort = {
       if (key.length === 0 || key === 'search') {
         const keySort = url.searchParams.get(key);
         if (keySort !== null) {
-          result = await Sort.searchTo(result, keySort);
+          result = Sort.searchTo(result, keySort);
           localStorage.setItem(key, JSON.stringify(keySort));
         }
       }
@@ -80,7 +80,7 @@ const Sort = {
             localStorage.setItem(key, JSON.stringify(newKeySortBrand));
           }
         }
-        result = await Sort.sortByBlock(result, newKeySortCategory, newKeySortBrand);
+        result = Sort.sortByBlock(result, newKeySortCategory, newKeySortBrand);
       }
     }
     localStorage.setItem('getProduct', JSON.stringify(result));

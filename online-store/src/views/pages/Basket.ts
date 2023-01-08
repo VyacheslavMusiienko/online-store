@@ -1,6 +1,9 @@
-let Basket = {
-  render: async () => {
-    let view = `
+import { IProduct } from '../../interface/Product';
+import { PromiseStringType, PromiseVoidType } from '../../types';
+
+const Basket = {
+  render: async (): PromiseStringType => {
+    const view = `
     <section class="cart-container">
         <div class="cart-item cart-container-products">
             <h2 class="text-cart">Products In Cart</h2>
@@ -27,28 +30,29 @@ let Basket = {
     `;
     return view;
   },
-  after_render: async () => {
-    const productNumber = document.querySelector('.products-number-sp');
-    const cartStore = document.querySelector('.cart-item-content');
-    let cartStorage = JSON.parse(localStorage.getItem('cart') || '[]');
-    const basketProductsCounter = document.querySelector('.header-basket-number');
-    basketProductsCounter.innerHTML = cartStorage.length;
-    let getTotal = cartStorage.reduce((a, c) => a + +c.price, 0);
-    document.querySelector('.cart-total-inner').innerHTML = getTotal;
-    productNumber.innerHTML = cartStorage.length;
-    if (cartStorage.length) {
+  after_render: async (): PromiseVoidType => {
+    const productNumber = document.querySelector('.products-number-sp') as HTMLElement;
+    const cartStore = document.querySelector('.cart-item-content') as HTMLElement;
+    const cartStorage: IProduct[] = JSON.parse(localStorage.getItem('cart') || '[]');
+    const basketProductsCounter = document.querySelector('.header-basket-number') as HTMLElement;
+    const cartStorageLength = cartStorage.length;
+    basketProductsCounter.innerHTML = `${cartStorageLength}`;
+    const getTotal = cartStorage.reduce((a, c) => a + +c.price, 0);
+    (document.querySelector('.cart-total-inner') as HTMLInputElement).innerHTML = `${getTotal}`;
+    productNumber.innerHTML = `${cartStorageLength}`;
+    if (cartStorageLength) {
       cartStorage.forEach((el, idx) => {
-        const { id, title, price, image, description, discount, brand, rating, stock } = el;
+        const { id, title, price, images, description, discountPercentage, brand, rating, stock } = el;
         const newCard = document.createElement('div');
         cartStore.append(newCard);
         newCard.innerHTML = `
         <div class='cart-store-container'>
-        <span class='cart-item-number'>${idx + 1}</span><img class='image-store-cart' src='${image}' alt='product'>
+        <span class='cart-item-number'>${idx + 1}</span><img class='image-store-cart' src='${images}' alt='product'>
           <div class='cart-id'>${id}</div>
           <div class='cart-item-title'>${title}<div>
           <div class='cart-item-price'>Price: &#8364;&nbsp;${price}</div>
           <div class='cart-item-description'>${description}</div>
-          <div class='cart-item-discount'><span class="title">Discount percentage: </span>${discount}</div>
+          <div class='cart-item-discount'><span class="title">Discount percentage: </span>${discountPercentage}</div>
           <div class='cart-item-brand'><span class="title">Brand: </span>${brand}</div>
           <div class='cart-item-rating'><span class="title">Rating: </span>${rating}</div>
           <div class='cart-item-stock'><span class="title">Stock: </span>${stock}</div>
@@ -58,14 +62,14 @@ let Basket = {
           </div>`;
       });
     }
-    const btnAdd = document.querySelectorAll('.btn-add');
+    const btnAdd = document.querySelectorAll('.btn-add') as NodeList;
     const btnDelete = document.querySelectorAll('.btn-delete');
-    const carts = document.querySelectorAll('.cart-store-container');
-    let totalMoney = document.querySelector('.total-money');
+    // const carts = document.querySelectorAll('.cart-store-container');
+    const totalMoney = document.querySelector('.total-money') as HTMLElement;
 
-    const total = document.querySelector('.cart-total-inner');
+    const total = document.querySelector('.cart-total-inner') as HTMLElement;
 
-    let totalStorage = JSON.parse(localStorage.getItem('total') || '0');
+    const totalStorage = JSON.parse(localStorage.getItem('total') || '0');
     totalMoney.innerHTML = totalStorage;
     // carts.forEach((el, i) =>
     //   el.addEventListener('click', async function res(e) {
@@ -85,33 +89,33 @@ let Basket = {
     btnDelete.forEach((el, i) =>
       el.addEventListener('click', async function () {
         const count = document.querySelectorAll('.text-items');
-        count[i].innerHTML = +count[i].innerHTML - 1;
+        count[i].innerHTML = `{+count[i].innerHTML - 1}`;
         // if (document.querySelectorAll('.cart-item-price')) {
-          let addTotal = document.querySelectorAll('.cart-item-price')[i].innerHTML;
-          addTotal = addTotal.slice(14)
-          // console.log(addTotal);
-          // console.log(totalMoney.innerHTML);
-          let moneyValue = +totalMoney.innerHTML;
-          let res = +moneyValue - +addTotal;
-          // console.log(moneyValue);
-          moneyValue -= res;
-          let currTotal = res;
-          // currTotal = res;
-          localStorage.setItem('total', JSON.stringify(currTotal));
-          total.innerHTML = currTotal;
+        let addTotal = document.querySelectorAll('.cart-item-price')[i].innerHTML;
+        addTotal = addTotal.slice(14);
+        // console.log(addTotal);
+        // console.log(totalMoney.innerHTML);
+        let moneyValue = +totalMoney.innerHTML;
+        const res = +moneyValue - +addTotal;
+        // console.log(moneyValue);
+        moneyValue -= res;
+        const currTotal = res;
+        // currTotal = res;
+        localStorage.setItem('total', JSON.stringify(currTotal));
+        total.innerHTML = `${currTotal}`;
         // }
       })
     );
 
     btnAdd.forEach((el, i) =>
-      el.addEventListener('click', function () {
-        this.previousSibling.innerHTML = +this.previousSibling.innerHTML + 1;
-        let addTotal = document.querySelectorAll('.cart-item-price')[i].innerHTML;
+      el.addEventListener('click', () => {
+        // btnAdd.previousSibling.innerHTML = +btnAdd.previousSibling.innerHTML + 1;
+        const addTotal = document.querySelectorAll('.cart-item-price')[i].innerHTML;
         // console.log(addTotal);
-        totalMoney.innerHTML = +totalMoney.innerHTML + +addTotal;
-        let currentTotal = +totalMoney.innerHTML;
+        totalMoney.innerHTML = `${+totalMoney.innerHTML + +addTotal}`;
+        const currentTotal = +totalMoney.innerHTML;
         localStorage.setItem('total', JSON.stringify(currentTotal));
-        total.innerHTML = currentTotal;
+        total.innerHTML = `${currentTotal}`;
       })
     );
     total.innerHTML = totalStorage;
