@@ -1,6 +1,7 @@
 import Sort from '../../services/Sort';
 import Service from '../../services/Services';
 import { IProduct } from '../../interface/Product';
+import { PromiseStringType } from '../../types';
 
 const getProductList = async () => {
   const options = {
@@ -49,7 +50,7 @@ const Home = {
   // cards wrapper
 
   // cards menu
-  renderCardsSort: async () => {
+  renderCardsSort: async (): PromiseStringType => {
     const view = `
     <div class="cards-sort">
       <select class="select-sort">
@@ -64,7 +65,7 @@ const Home = {
     </div>`;
     return view;
   },
-  renderCardsFound: async (product: IProduct[]) => {
+  renderCardsFound: async (product: IProduct[]): PromiseStringType => {
     const view = `
     <div class="cards-found">
       Found: ${product.length}
@@ -76,7 +77,7 @@ const Home = {
     <input type="search" class="cards-search" placeholder="Search" />`;
     return view;
   },
-  renderCardsSwitch: async () => {
+  renderCardsSwitch: async (): PromiseStringType => {
     if (toggle === true) {
       const view = `
         <div class="cards-switch">
@@ -96,7 +97,7 @@ const Home = {
     </div>`;
     return view;
   },
-  renderCardsMenu: async () => {
+  renderCardsMenu: async (): PromiseStringType => {
     const view = `
       <div class="cards-menu">
         ${await Home.renderCardsSort()}
@@ -109,7 +110,7 @@ const Home = {
   },
 
   // render Cards
-  renderCard: async (product: IProduct[]) => {
+  renderCard: async (product: IProduct[]): PromiseStringType => {
     if (product.length === 0) {
       return `<div class="not-found">
                 No products found
@@ -157,7 +158,7 @@ const Home = {
       )
       .join('');
   },
-  renderCards: async () => {
+  renderCards: async (): PromiseStringType => {
     const product = await isGetProduct();
     const view = /*html*/ `
                 <div class="cards-table">
@@ -263,8 +264,8 @@ const Home = {
       const cardsTable = document.querySelector('.cards-table') as HTMLElement;
       const cardsFound = document.querySelector('.cards-found') as HTMLElement;
 
-      cardsTable.innerHTML = await Home.renderCards();
-      cardsFound.innerHTML = await Home.renderCardsFound(renderResult);
+      cardsTable.innerHTML = `${await Home.renderCards()}`;
+      cardsFound.innerHTML = `${await Home.renderCardsFound(renderResult)}`;
     }
     // window.addEventListener('hashchange', sort());
     // reset
