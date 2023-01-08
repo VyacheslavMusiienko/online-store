@@ -1,11 +1,8 @@
 import { IProduct } from '../interface/Product';
 const Sort = {
-  unique: (arr: IProduct[], property: string) => {
-    const newArray = arr.map((item) => item[property as keyof IProduct]);
-    const set1 = new Set(newArray);
-    const array = [...set1];
-    // const result = Array.from(new Set(arr.map((item) => item[property as keyof IProduct])));
-    return array;
+  unique: (arr: IProduct[], property: 'category' | 'brand'): string[] => {
+    const result = Array.from(new Set(arr.map((item) => item[property])));
+    return result;
   },
   sortBySelector: (products: IProduct[], propertyForSort: string, direction: string): IProduct[] => {
     return products.sort((productA: IProduct, productB: IProduct) => {

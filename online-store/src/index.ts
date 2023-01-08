@@ -43,7 +43,7 @@ const router = async () => {
     (request.id ? '/:id' : '') +
     (request.verb ? '/' + request.verb : '');
 
-  const page = routes[parsedURL] ? routes[parsedURL] : Error404;
+  const page = routes[parsedURL as keyof typeof routes] ? routes[parsedURL as keyof typeof routes] : Error404;
 
   if (content !== null) {
     content.innerHTML = `${await page.render()}`;

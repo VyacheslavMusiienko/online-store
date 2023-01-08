@@ -21,17 +21,17 @@ const getProductList = async () => {
 const isProductLocalStorage = () => {
   return localStorage.getItem('getProduct') ? true : false;
 };
-const getProductsFromStorage = async () => {
+const getProductsFromStorage = () => {
   const storageProducts = localStorage.getItem('getProduct');
   if (storageProducts !== null) {
-    const products = await JSON.parse(storageProducts);
+    const products = JSON.parse(storageProducts);
     return products;
   }
 };
 
 const isGetProduct = async () => {
-  const getProduct = isProductLocalStorage() ? getProductsFromStorage() : getProductList();
-  return await getProduct;
+  const getProduct = isProductLocalStorage() ? getProductsFromStorage() : await getProductList();
+  return getProduct;
 };
 const isToggleLocalStorage = () => {
   return localStorage.getItem('toggle') ? true : false;
@@ -50,7 +50,7 @@ const Home = {
   // cards wrapper
 
   // cards menu
-  renderCardsSort: async (): PromiseStringType => {
+  renderCardsSort: () => {
     const view = `
     <div class="cards-sort">
       <select class="select-sort">
@@ -65,19 +65,19 @@ const Home = {
     </div>`;
     return view;
   },
-  renderCardsFound: async (product: IProduct[]): PromiseStringType => {
+  renderCardsFound: (product: IProduct[]) => {
     const view = `
     <div class="cards-found">
       Found: ${product.length}
     </div>`;
     return view;
   },
-  renderCardsSearch: async () => {
+  renderCardsSearch: () => {
     const view = `
     <input type="search" class="cards-search" placeholder="Search" />`;
     return view;
   },
-  renderCardsSwitch: async (): PromiseStringType => {
+  renderCardsSwitch: () => {
     if (toggle === true) {
       const view = `
         <div class="cards-switch">
@@ -100,17 +100,17 @@ const Home = {
   renderCardsMenu: async (): PromiseStringType => {
     const view = `
       <div class="cards-menu">
-        ${await Home.renderCardsSort()}
-        ${await Home.renderCardsFound(await isGetProduct())}
-        ${await Home.renderCardsSearch()}
-        ${await Home.renderCardsSwitch()}
+        ${Home.renderCardsSort()}
+        ${Home.renderCardsFound(await isGetProduct())}
+        ${Home.renderCardsSearch()}
+        ${Home.renderCardsSwitch()}
       </div>
     `;
     return view;
   },
 
   // render Cards
-  renderCard: async (product: IProduct[]): PromiseStringType => {
+  renderCard: (product: IProduct[]) => {
     if (product.length === 0) {
       return `<div class="not-found">
                 No products found
@@ -162,39 +162,39 @@ const Home = {
     const product = await isGetProduct();
     const view = /*html*/ `
                 <div class="cards-table">
-                    ${await Home.renderCard(product)}
+                    ${Home.renderCard(product)}
                 </div>
         `;
     return view;
   },
   renderWrapperCards: async () => {
     const view = `
-    <div class="wrapper cards">
-      ${await Home.renderCardsMenu()}
-      ${await Home.renderCards()}
-    </div>
+      <div class="wrapper cards">
+        ${await Home.renderCardsMenu()}
+        ${await Home.renderCards()}
+      </div>
     `;
     return view;
   },
   // filter wrapper
 
   // button filter
-  renderFilterButton: async (param: string, input: string) => {
+  renderFilterButton: (param: string, input: string) => {
     const view = `
       <button class="btn ${param}">${input}</button>
     `;
     return view;
   },
-  renderFilterButtons: async () => {
+  renderFilterButtons: () => {
     const view = `
       <div class="button-filter">
-        ${await Home.renderFilterButton('reset', 'Reset')}
-        ${await Home.renderFilterButton('copy', 'Copy')}
+        ${Home.renderFilterButton('reset', 'Reset')}
+        ${Home.renderFilterButton('copy', 'Copy')}
       </div>`;
     return view;
   },
-  renderedFilterItemBody: async (arg: IProduct[], name: string) => {
-    return await arg
+  renderedFilterItemBody: (arg: string[], name: string) => {
+    return arg
       .map((products) => {
         return `<div class = "filter-item">
                     <input type="checkbox" id="${products}" name="${name}">
@@ -203,13 +203,13 @@ const Home = {
       })
       .join('');
   },
-  getRenderedFilterCategoryBody: async (products: IProduct[]) => {
-    const filterUnique = await Sort.unique(products, 'category');
-    return await Home.renderedFilterItemBody(filterUnique, 'category');
+  getRenderedFilterCategoryBody: (products: IProduct[]) => {
+    const filterUnique = Sort.unique(products, 'category');
+    return Home.renderedFilterItemBody(filterUnique, 'category');
   },
-  getRenderedFilterBrandBody: async (products: IProduct[]) => {
-    const filterUnique = await Sort.unique(products, 'brand');
-    return await Home.renderedFilterItemBody(filterUnique, 'brand');
+  getRenderedFilterBrandBody: (products: IProduct[]) => {
+    const filterUnique = Sort.unique(products, 'brand');
+    return Home.renderedFilterItemBody(filterUnique, 'brand');
   },
   // filter category
   renderFilterCategory: async () => {
@@ -218,7 +218,7 @@ const Home = {
     <div class="filter-block category-block">
       <div class="filter-title category-title">Category</div>
         <div class="filter-body category-body">
-          ${await Home.getRenderedFilterCategoryBody(categories)}
+          ${Home.getRenderedFilterCategoryBody(categories)}
         </div>
     </div>`;
     return view;
@@ -231,7 +231,7 @@ const Home = {
     <div class="filter-block brand-block">
       <div class="filter-title brand-title">Brand</div>
         <div class="filter-body brand-body">
-          ${await Home.getRenderedFilterBrandBody(brands)}
+          ${Home.getRenderedFilterBrandBody(brands)}
         </div>
     </div>`;
     return view;
@@ -239,7 +239,7 @@ const Home = {
   renderWrapperFilter: async () => {
     const view = `
     <div class="wrapper filter">
-      ${await Home.renderFilterButtons()}
+      ${Home.renderFilterButtons()}
       ${await Home.renderFilterCategory()}
       ${await Home.renderFilterBrand()}
     </div>
@@ -259,13 +259,13 @@ const Home = {
     async function sort() {
       const result = await getProductList();
 
-      const renderResult = await Sort.locationSort(result);
+      const renderResult = Sort.locationSort(result);
 
       const cardsTable = document.querySelector('.cards-table') as HTMLElement;
       const cardsFound = document.querySelector('.cards-found') as HTMLElement;
 
       cardsTable.innerHTML = `${await Home.renderCards()}`;
-      cardsFound.innerHTML = `${await Home.renderCardsFound(renderResult)}`;
+      cardsFound.innerHTML = `${Home.renderCardsFound(renderResult)}`;
     }
     // window.addEventListener('hashchange', sort());
     // reset
