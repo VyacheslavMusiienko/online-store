@@ -1,7 +1,5 @@
-import { PromiseStringType, PromiseVoidType } from '../../types';
-
 const Modal = {
-  render: async (): PromiseStringType => {
+  render: () => {
     const view = `
     <div class="modal">
         <div class="modal-content">
@@ -47,7 +45,7 @@ const Modal = {
     `;
     return view;
   },
-  after_render: async (): PromiseVoidType => {
+  after_render: () => {
     const button = document.querySelector('.btn_confirm') as HTMLButtonElement;
     //для правильного форматирования кредитной карты
 

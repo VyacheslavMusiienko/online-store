@@ -2,7 +2,7 @@ import { OptionType, PromiseStringType } from '../../types';
 
 const Footer: OptionType = {
   render: async (): PromiseStringType => {
-    const view = /*html*/ `
+    const view = `
         <footer class="footer">
           <a class="link images" href="https://rs.school/js/">
             <img class="footer__img" src="./rs_school_js.svg" alt="logo curs">
@@ -15,7 +15,6 @@ const Footer: OptionType = {
         `;
     return view;
   },
-  // after_render: async () => {},
 };
 
 export default Footer;

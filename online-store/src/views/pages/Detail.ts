@@ -1,5 +1,4 @@
 import Utils from '../../services/Utils';
-import { OptionType, PromiseStringType, PromiseVoidType } from '../../types';
 
 const getSingleProduct = async (id: string | null) => {
   const options = {
@@ -17,18 +16,18 @@ const getSingleProduct = async (id: string | null) => {
   }
 };
 
-const Detail: OptionType = {
-  render: async (): PromiseStringType => {
+const Detail = {
+  render: async () => {
     const request = Utils.parseRequestURL();
     const post = await getSingleProduct(request.id);
 
-    const view = /*html*/ `
+    const view = `
       <section class="section details-section">
         <div class="description-container">
               <div class="flex-container">
               <h2 class="description-title">${post.title}</h2>
               <div class="block-images">
-                <div class="container-image-descr">
+                <div class="container-image-description">
                 <img class="main-image-description" src="${post.images[0]}" alt="product-image">
                 </div>
                 <div class="secondary-images-box">
@@ -49,7 +48,7 @@ const Detail: OptionType = {
               </div>
               <div class="block-container">
                 <h3 class="description-item">Rating:</h3>
-                <div class="raiting-info info">${post.rating}</div>
+                <div class="rating-info info">${post.rating}</div>
               </div>
               <div class="block-container">
                 <h3 class="description-item">Stock:</h3>
@@ -62,16 +61,16 @@ const Detail: OptionType = {
             </div>
             <div class="block-summary">
 
-              <button class="descr-btn" id="add_to_cart">Add to cart</button>
+              <button class="description-btn" id="add_to_cart">Add to cart</button>
 
-              <a href="/#/modal" class="descr-btn">BUY NOW</a>
+              <a href="/#/modal" class="description-btn">BUY NOW</a>
             </div>
           </div>
         </div>
       </section>`;
     return view;
   },
-  renderImages: async (): PromiseVoidType => {
+  renderImages: async () => {
     const request = Utils.parseRequestURL();
     const post = await getSingleProduct(request.id);
     const arr = post.images;
@@ -83,7 +82,7 @@ const Detail: OptionType = {
     });
   },
 
-  after_render: async (): PromiseVoidType => {
+  after_render: async () => {
     await Detail.renderImages();
     const request = Utils.parseRequestURL();
     const post = await getSingleProduct(request.id);
