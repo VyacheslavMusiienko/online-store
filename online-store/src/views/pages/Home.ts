@@ -21,17 +21,17 @@ const getProductList = async () => {
 const isProductLocalStorage = () => {
   return localStorage.getItem('getProduct') ? true : false;
 };
-const getProductsFromStorage = async () => {
+const getProductsFromStorage = () => {
   const storageProducts = localStorage.getItem('getProduct');
   if (storageProducts !== null) {
-    const products = await JSON.parse(storageProducts);
+    const products = JSON.parse(storageProducts);
     return products;
   }
 };
 
 const isGetProduct = async () => {
-  const getProduct = isProductLocalStorage() ? getProductsFromStorage() : getProductList();
-  return await getProduct;
+  const getProduct = isProductLocalStorage() ? getProductsFromStorage() : await getProductList();
+  return getProduct;
 };
 const isToggleLocalStorage = () => {
   return localStorage.getItem('toggle') ? true : false;
@@ -97,7 +97,7 @@ const Home = {
     </div>`;
     return view;
   },
-  renderCardsMenu: async () => {
+  renderCardsMenu: async (): PromiseStringType => {
     const view = `
       <div class="cards-menu">
         ${Home.renderCardsSort()}
@@ -120,7 +120,7 @@ const Home = {
     if (toggle === true) {
       return product
         .map(
-          (product) => `<div class="card-container height">
+          (product) => /*html*/ `<div class="card-container height">
                                     <div class="img-container">
                                         <img class="card-image" src="${product.images[0]}" alt="card-image">
                                         <div class="card-price">Price: &#8364;${product.price}</div>
@@ -139,7 +139,7 @@ const Home = {
     }
     return product
       .map(
-        (product) => `<div class="card-container">
+        (product) => /*html*/ `<div class="card-container">
                                     <div class="img-container">
                                         <img class="card-image" src="${product.images[0]}" alt="card-image">
                                         <div class="card-price">Price: &#8364;${product.price}</div>
@@ -160,19 +160,19 @@ const Home = {
   },
   renderCards: async (): PromiseStringType => {
     const product = await isGetProduct();
-    const view = `
+    const view = /*html*/ `
                 <div class="cards-table">
-                    ${await Home.renderCard(product)}
+                    ${Home.renderCard(product)}
                 </div>
         `;
     return view;
   },
-  renderWrapperCards: () => {
+  renderWrapperCards: async () => {
     const view = `
-    <div class="wrapper cards">
-      ${Home.renderCardsMenu()}
-      ${Home.renderCards()}
-    </div>
+      <div class="wrapper cards">
+        ${await Home.renderCardsMenu()}
+        ${await Home.renderCards()}
+      </div>
     `;
     return view;
   },
@@ -195,10 +195,10 @@ const Home = {
   },
   renderedFilterItemBody: (arg: string[], name: string) => {
     return arg
-      .map((productsItem) => {
+      .map((products) => {
         return `<div class = "filter-item">
-                    <input type="checkbox" id="${productsItem}" name="${name}">
-                    <label for="${productsItem}">${productsItem}</label>
+                    <input type="checkbox" id="${products}" name="${name}">
+                    <label for="${products}">${products}</label>
                 </div>`;
       })
       .join('');
@@ -236,21 +236,21 @@ const Home = {
     </div>`;
     return view;
   },
-  renderWrapperFilter: () => {
+  renderWrapperFilter: async () => {
     const view = `
     <div class="wrapper filter">
       ${Home.renderFilterButtons()}
-      ${Home.renderFilterCategory()}
-      ${Home.renderFilterBrand()}
+      ${await Home.renderFilterCategory()}
+      ${await Home.renderFilterBrand()}
     </div>
     `;
     return view;
   },
-  render: () => {
-    const view = `
+  render: async () => {
+    const view = /*html*/ `
             <main class="main d-flex">
-              ${Home.renderWrapperFilter()}
-              ${Home.renderWrapperCards()}
+              ${await Home.renderWrapperFilter()}
+              ${await Home.renderWrapperCards()}
             </main>
         `;
     return view;
@@ -264,9 +264,10 @@ const Home = {
       const cardsTable = document.querySelector('.cards-table') as HTMLElement;
       const cardsFound = document.querySelector('.cards-found') as HTMLElement;
 
-      cardsTable.innerHTML = `${Home.renderCards()}`;
+      cardsTable.innerHTML = `${await Home.renderCards()}`;
       cardsFound.innerHTML = `${Home.renderCardsFound(renderResult)}`;
     }
+    // window.addEventListener('hashchange', sort());
     // reset
     const reset = document.querySelector('.reset') as HTMLButtonElement;
     reset.addEventListener('click', () => {
