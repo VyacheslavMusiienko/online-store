@@ -50,7 +50,7 @@ const Home = {
   // cards wrapper
 
   // cards menu
-  renderCardsSort: async (): PromiseStringType => {
+  renderCardsSort: () => {
     const view = `
     <div class="cards-sort">
       <select class="select-sort">
@@ -65,19 +65,19 @@ const Home = {
     </div>`;
     return view;
   },
-  renderCardsFound: async (product: IProduct[]): PromiseStringType => {
+  renderCardsFound: (product: IProduct[]) => {
     const view = `
     <div class="cards-found">
       Found: ${product.length}
     </div>`;
     return view;
   },
-  renderCardsSearch: async () => {
+  renderCardsSearch: () => {
     const view = `
     <input type="search" class="cards-search" placeholder="Search" />`;
     return view;
   },
-  renderCardsSwitch: async (): PromiseStringType => {
+  renderCardsSwitch: () => {
     if (toggle === true) {
       const view = `
         <div class="cards-switch">
@@ -97,20 +97,20 @@ const Home = {
     </div>`;
     return view;
   },
-  renderCardsMenu: async (): PromiseStringType => {
+  renderCardsMenu: async () => {
     const view = `
       <div class="cards-menu">
-        ${await Home.renderCardsSort()}
-        ${await Home.renderCardsFound(await isGetProduct())}
-        ${await Home.renderCardsSearch()}
-        ${await Home.renderCardsSwitch()}
+        ${Home.renderCardsSort()}
+        ${Home.renderCardsFound(await isGetProduct())}
+        ${Home.renderCardsSearch()}
+        ${Home.renderCardsSwitch()}
       </div>
     `;
     return view;
   },
 
   // render Cards
-  renderCard: async (product: IProduct[]): PromiseStringType => {
+  renderCard: (product: IProduct[]) => {
     if (product.length === 0) {
       return `<div class="not-found">
                 No products found
@@ -120,7 +120,7 @@ const Home = {
     if (toggle === true) {
       return product
         .map(
-          (product) => /*html*/ `<div class="card-container height">
+          (product) => `<div class="card-container height">
                                     <div class="img-container">
                                         <img class="card-image" src="${product.images[0]}" alt="card-image">
                                         <div class="card-price">Price: &#8364;${product.price}</div>
@@ -139,7 +139,7 @@ const Home = {
     }
     return product
       .map(
-        (product) => /*html*/ `<div class="card-container">
+        (product) => `<div class="card-container">
                                     <div class="img-container">
                                         <img class="card-image" src="${product.images[0]}" alt="card-image">
                                         <div class="card-price">Price: &#8364;${product.price}</div>
@@ -160,18 +160,18 @@ const Home = {
   },
   renderCards: async (): PromiseStringType => {
     const product = await isGetProduct();
-    const view = /*html*/ `
+    const view = `
                 <div class="cards-table">
                     ${await Home.renderCard(product)}
                 </div>
         `;
     return view;
   },
-  renderWrapperCards: async () => {
+  renderWrapperCards: () => {
     const view = `
     <div class="wrapper cards">
-      ${await Home.renderCardsMenu()}
-      ${await Home.renderCards()}
+      ${Home.renderCardsMenu()}
+      ${Home.renderCards()}
     </div>
     `;
     return view;
@@ -179,37 +179,37 @@ const Home = {
   // filter wrapper
 
   // button filter
-  renderFilterButton: async (param: string, input: string) => {
+  renderFilterButton: (param: string, input: string) => {
     const view = `
       <button class="btn ${param}">${input}</button>
     `;
     return view;
   },
-  renderFilterButtons: async () => {
+  renderFilterButtons: () => {
     const view = `
       <div class="button-filter">
-        ${await Home.renderFilterButton('reset', 'Reset')}
-        ${await Home.renderFilterButton('copy', 'Copy')}
+        ${Home.renderFilterButton('reset', 'Reset')}
+        ${Home.renderFilterButton('copy', 'Copy')}
       </div>`;
     return view;
   },
-  renderedFilterItemBody: async (arg: IProduct[], name: string) => {
-    return await arg
-      .map((products) => {
+  renderedFilterItemBody: (arg: string[], name: string) => {
+    return arg
+      .map((productsItem) => {
         return `<div class = "filter-item">
-                    <input type="checkbox" id="${products}" name="${name}">
-                    <label for="${products}">${products}</label>
+                    <input type="checkbox" id="${productsItem}" name="${name}">
+                    <label for="${productsItem}">${productsItem}</label>
                 </div>`;
       })
       .join('');
   },
-  getRenderedFilterCategoryBody: async (products: IProduct[]) => {
-    const filterUnique = await Sort.unique(products, 'category');
-    return await Home.renderedFilterItemBody(filterUnique, 'category');
+  getRenderedFilterCategoryBody: (products: IProduct[]) => {
+    const filterUnique = Sort.unique(products, 'category');
+    return Home.renderedFilterItemBody(filterUnique, 'category');
   },
-  getRenderedFilterBrandBody: async (products: IProduct[]) => {
-    const filterUnique = await Sort.unique(products, 'brand');
-    return await Home.renderedFilterItemBody(filterUnique, 'brand');
+  getRenderedFilterBrandBody: (products: IProduct[]) => {
+    const filterUnique = Sort.unique(products, 'brand');
+    return Home.renderedFilterItemBody(filterUnique, 'brand');
   },
   // filter category
   renderFilterCategory: async () => {
@@ -218,7 +218,7 @@ const Home = {
     <div class="filter-block category-block">
       <div class="filter-title category-title">Category</div>
         <div class="filter-body category-body">
-          ${await Home.getRenderedFilterCategoryBody(categories)}
+          ${Home.getRenderedFilterCategoryBody(categories)}
         </div>
     </div>`;
     return view;
@@ -231,26 +231,26 @@ const Home = {
     <div class="filter-block brand-block">
       <div class="filter-title brand-title">Brand</div>
         <div class="filter-body brand-body">
-          ${await Home.getRenderedFilterBrandBody(brands)}
+          ${Home.getRenderedFilterBrandBody(brands)}
         </div>
     </div>`;
     return view;
   },
-  renderWrapperFilter: async () => {
+  renderWrapperFilter: () => {
     const view = `
     <div class="wrapper filter">
-      ${await Home.renderFilterButtons()}
-      ${await Home.renderFilterCategory()}
-      ${await Home.renderFilterBrand()}
+      ${Home.renderFilterButtons()}
+      ${Home.renderFilterCategory()}
+      ${Home.renderFilterBrand()}
     </div>
     `;
     return view;
   },
-  render: async () => {
-    const view = /*html*/ `
+  render: () => {
+    const view = `
             <main class="main d-flex">
-              ${await Home.renderWrapperFilter()}
-              ${await Home.renderWrapperCards()}
+              ${Home.renderWrapperFilter()}
+              ${Home.renderWrapperCards()}
             </main>
         `;
     return view;
@@ -259,15 +259,14 @@ const Home = {
     async function sort() {
       const result = await getProductList();
 
-      const renderResult = await Sort.locationSort(result);
+      const renderResult = Sort.locationSort(result);
 
       const cardsTable = document.querySelector('.cards-table') as HTMLElement;
       const cardsFound = document.querySelector('.cards-found') as HTMLElement;
 
-      cardsTable.innerHTML = `${await Home.renderCards()}`;
-      cardsFound.innerHTML = `${await Home.renderCardsFound(renderResult)}`;
+      cardsTable.innerHTML = `${Home.renderCards()}`;
+      cardsFound.innerHTML = `${Home.renderCardsFound(renderResult)}`;
     }
-    // window.addEventListener('hashchange', sort());
     // reset
     const reset = document.querySelector('.reset') as HTMLButtonElement;
     reset.addEventListener('click', () => {

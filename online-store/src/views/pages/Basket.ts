@@ -1,8 +1,7 @@
 import { IProduct } from '../../interface/Product';
-import { PromiseStringType, PromiseVoidType } from '../../types';
 
 const Basket = {
-  render: async (): PromiseStringType => {
+  render: () => {
     const view = `
     <section class="cart-container">
         <div class="cart-item cart-container-products">
@@ -30,7 +29,7 @@ const Basket = {
     `;
     return view;
   },
-  after_render: async (): PromiseVoidType => {
+  after_render: () => {
     const productNumber = document.querySelector('.products-number-sp') as HTMLElement;
     const cartStore = document.querySelector('.cart-item-content') as HTMLElement;
     const cartStorage: IProduct[] = JSON.parse(localStorage.getItem('cart') || '[]');

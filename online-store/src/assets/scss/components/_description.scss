@@ -35,7 +35,7 @@
   background-color: $color_wave;
 }
 
-.container-image-descr {
+.container-image-description {
   width: 280px;
   height: 200px;
   border-radius: 10px;
@@ -84,7 +84,7 @@
   margin-top: 20px;
 }
 
-// .descr-btn {
+// .description-btn {
 //   margin-top: 10px;
 // }
 
@@ -123,7 +123,7 @@
   align-items: center;
 }
 
-.descr-btn {
+.description-btn {
   width: 40%;
   border-radius: 5px;
   border: none;
@@ -134,6 +134,6 @@
   text-decoration: none;
 }
 
-.descr-btn:hover {
+.description-btn:hover {
   background-color: $color_ocean;
 }

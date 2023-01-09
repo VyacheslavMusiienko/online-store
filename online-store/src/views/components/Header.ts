@@ -2,7 +2,7 @@ import { OptionType, PromiseStringType, PromiseVoidType } from '../../types';
 
 const Header: OptionType = {
   render: async (): PromiseStringType => {
-    const view = /*html*/ `
+    const view = `
               <header class="header">
                 <div class="container">
                   <div class="logo_and_store">
