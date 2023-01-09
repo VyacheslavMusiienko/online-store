@@ -1,0 +1,139 @@
+.details-section{
+  margin: 0 auto;
+  height: 65.8vh;
+}
+
+.description-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 5% auto;
+  background-color: $color_deep-water;
+  width: 90%;
+  height: fit-content;
+  border-radius: 30px;
+}
+
+.description-title {
+  min-width: 30%;
+  position: absolute;
+  top: -48px;
+  left: 40px;
+  font-size: 25px;
+  color: $color_wave;
+  padding: 10px;
+  background-color: $color_ocean;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.description-item {
+  font-size: 17px;
+  color: $color_deep-water;
+  background-color: $color_wave;
+}
+
+.container-image-description {
+  width: 280px;
+  height: 200px;
+  border-radius: 10px;
+  padding: 5px;
+  overflow: hidden;
+  // background-color: $color_ocean;
+  // background-size: cover;
+}
+
+.main-image-description {
+  max-width: 280px;
+  max-height: 200px;
+  border-radius: 10px;
+  margin-right: 50px;
+  background-size: cover;
+
+}
+
+.secondary-images-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  border-radius: 20px;
+}
+
+.secondary-image-description {
+  width: 30%;
+  border-radius: 4px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.block-images{
+  width: 20%;
+  margin: 20px;
+}
+
+.block-summary {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+// .description-btn {
+//   margin-top: 10px;
+// }
+
+.block-container {
+  border-radius: 10px;
+}
+
+.block-description {
+  width: 40%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 70%;
+  padding: 5px;
+  margin: 10px;
+  background-color: $color_wave;
+  border-radius: 10px;
+}
+
+.info {
+  padding: 4px;
+  color: $color_sea-foam;
+  background-color: $color_ocean;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  margin: 0 auto;
+  width: 70%;
+  overflow: hidden;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.description-btn {
+  width: 40%;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  background-color: $color_deep-water;
+  padding: 5px 5px;
+  color: $color_wave;
+  text-decoration: none;
+}
+
+.description-btn:hover {
+  background-color: $color_ocean;
+}

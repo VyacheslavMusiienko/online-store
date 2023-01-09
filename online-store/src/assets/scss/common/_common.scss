@@ -1,0 +1,82 @@
+*,*::before,*::after{
+  font: 14px 'Arial', sans-serif;
+  color: $color_text-main;
+  font-weight: 500;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+ul,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style-type: none;
+}
+
+.d-flex{
+  display: flex;
+  width: 100%;
+}
+
+.wrapper{
+  margin: 5px;
+  padding: 10px;
+  border-radius: 15px;
+  background-color: $color_deep-water;
+  height: fit-content;
+}
+
+.btn {
+  display: inline-block;
+  padding: 9px 5px;
+  text-align: center;
+  background-color: $color_ocean;
+  color: $color_sea-foam;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  height: 30px;
+  width: 40%;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background-color: $color_deep-water;
+}
+
+.filter-block{
+  margin: 13px 0;
+  background-color: $color_sea-foam;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.filter-title{
+  text-align: center;
+  background-color: $color_wave;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 24px;
+  margin-bottom: 10px ;
+}
+
+.filter-body{
+  border: 1px solid $color_ocean;
+  border-radius: 5px;
+  padding: 5px;
+  height: 200px;
+  overflow-y: auto;
+}
+.filter-item{
+  margin: 5px 0;
+  width: 310px;
+}
